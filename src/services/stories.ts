@@ -1,4 +1,4 @@
-import apiClient from './api'
+import { apiClient } from './api'
 import type {
     Story,
     CreateStoryRequest,
@@ -8,42 +8,47 @@ import type {
 export const storyService = {
     // Get stories for a project
     async getStoriesByProject(projectId: string): Promise<Story[]> {
-        const response = await apiClient.get<Story[]>(`/projects/${projectId}/stories`)
-        return response.data
+        return await apiClient.request(`/api/v1/projects/${projectId}/stories`)
     },
 
     // Get stories for a sprint
     async getStoriesBySprint(sprintId: string): Promise<Story[]> {
-        const response = await apiClient.get<Story[]>(`/sprints/${sprintId}/stories`)
-        return response.data
+        return await apiClient.request(`/api/v1/sprints/${sprintId}/stories`)
     },
 
     // Get story by ID
     async getStory(id: string): Promise<Story> {
-        const response = await apiClient.get<Story>(`/stories/${id}`)
-        return response.data
+        return await apiClient.request(`/api/v1/stories/${id}`)
     },
 
     // Create new story
     async createStory(storyData: CreateStoryRequest): Promise<Story> {
-        const response = await apiClient.post<Story>('/stories/', storyData)
-        return response.data
+        return await apiClient.request('/api/v1/stories/', {
+            method: 'POST',
+            body: JSON.stringify(storyData),
+        })
     },
 
     // Update story
     async updateStory(id: string, storyData: UpdateStoryRequest): Promise<Story> {
-        const response = await apiClient.put<Story>(`/stories/${id}`, storyData)
-        return response.data
+        return await apiClient.request(`/api/v1/stories/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(storyData),
+        })
     },
 
     // Delete story
     async deleteStory(id: string): Promise<void> {
-        await apiClient.delete(`/stories/${id}`)
+        await apiClient.request(`/api/v1/stories/${id}`, {
+            method: 'DELETE',
+        })
     },
 
     // Update story status (for drag & drop)
     async updateStoryStatus(id: string, status: Story['status']): Promise<Story> {
-        const response = await apiClient.patch<Story>(`/stories/${id}/status`, { status })
-        return response.data
+        return await apiClient.request(`/api/v1/stories/${id}/status`, {
+            method: 'PATCH',
+            body: JSON.stringify({ status }),
+        })
     },
 }

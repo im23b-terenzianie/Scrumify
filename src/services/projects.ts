@@ -1,4 +1,4 @@
-import apiClient from './api'
+import { apiClient } from './api'
 import type {
     Project,
     CreateProjectRequest
@@ -7,36 +7,39 @@ import type {
 export const projectService = {
     // Get all projects
     async getProjects(): Promise<Project[]> {
-        const response = await apiClient.get<Project[]>('/projects/')
-        return response.data
+        return await apiClient.request('/api/v1/projects/')
     },
 
     // Get project by ID
     async getProject(id: string): Promise<Project> {
-        const response = await apiClient.get<Project>(`/projects/${id}`)
-        return response.data
+        return await apiClient.request(`/api/v1/projects/${id}`)
     },
 
     // Create new project
     async createProject(projectData: CreateProjectRequest): Promise<Project> {
-        const response = await apiClient.post<Project>('/projects/', projectData)
-        return response.data
+        return await apiClient.request('/api/v1/projects/', {
+            method: 'POST',
+            body: JSON.stringify(projectData),
+        })
     },
 
     // Update project
     async updateProject(id: string, projectData: Partial<CreateProjectRequest>): Promise<Project> {
-        const response = await apiClient.put<Project>(`/projects/${id}`, projectData)
-        return response.data
+        return await apiClient.request(`/api/v1/projects/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(projectData),
+        })
     },
 
     // Delete project
     async deleteProject(id: string): Promise<void> {
-        await apiClient.delete(`/projects/${id}`)
+        await apiClient.request(`/api/v1/projects/${id}`, {
+            method: 'DELETE',
+        })
     },
 
     // Get project members
     async getProjectMembers(id: string): Promise<any[]> {
-        const response = await apiClient.get(`/projects/${id}/members`)
-        return response.data
+        return await apiClient.request(`/api/v1/projects/${id}/members`)
     },
 }

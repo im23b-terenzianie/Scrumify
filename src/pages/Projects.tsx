@@ -30,35 +30,35 @@ export default function Projects() {
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Projects</h1>
-                    <p className="text-gray-600">Manage your SCRUM projects</p>
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Projects</h1>
+                    <p className="text-gray-600 dark:text-gray-300">Manage your SCRUM projects</p>
                 </div>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                <button className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors">
                     New Project
                 </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {projects.map((project) => (
-                    <div key={project.id} className="bg-white p-6 rounded-lg shadow hover:shadow-md transition-shadow">
+                    <div key={project.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-md transition-shadow border dark:border-gray-700">
                         <div className="flex justify-between items-start mb-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-900">{project.name}</h3>
-                                <span className="text-sm text-gray-500">{project.key}</span>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{project.name}</h3>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">{project.key}</span>
                             </div>
                             <span className={`px-2 py-1 text-xs rounded-full ${project.status === 'Active'
-                                    ? 'bg-green-100 text-green-800'
-                                    : 'bg-yellow-100 text-yellow-800'
+                                ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                                 }`}>
                                 {project.status}
                             </span>
                         </div>
 
-                        <p className="text-gray-600 text-sm mb-4">{project.description}</p>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{project.description}</p>
 
                         <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-500">{project.members} members</span>
-                            <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            <span className="text-sm text-gray-500 dark:text-gray-400">{project.members} members</span>
+                            <button className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium transition-colors">
                                 View Board
                             </button>
                         </div>

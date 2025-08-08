@@ -12,6 +12,14 @@ export default defineConfig({
     server: {
         port: 3000,
         host: true,
+        proxy: {
+            '/api': {
+                target: 'https://api.scrumify.site',
+                changeOrigin: true,
+                secure: true,
+                rewrite: (path) => path
+            }
+        }
     },
     build: {
         outDir: 'dist',
