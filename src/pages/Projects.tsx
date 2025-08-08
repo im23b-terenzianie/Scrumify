@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 export default function Projects() {
     const projects = [
         {
@@ -58,9 +60,12 @@ export default function Projects() {
 
                         <div className="flex justify-between items-center">
                             <span className="text-sm text-gray-500 dark:text-gray-400">{project.members} members</span>
-                            <button className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium transition-colors">
+                            <Link
+                                to={`/projects/${project.id}/board`}
+                                className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium transition-colors"
+                            >
                                 View Board
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 ))}

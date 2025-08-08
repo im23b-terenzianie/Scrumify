@@ -1,6 +1,6 @@
 
 export const API_CONFIG = {
-    BASE_URL: import.meta.env.MODE === 'development' 
+    BASE_URL: import.meta.env.MODE === 'development'
         ? '' // Verwende Vite Proxy in Development
         : (import.meta.env.VITE_API_BASE_URL || 'https://api.scrumify.site'),
     ENDPOINTS: {
