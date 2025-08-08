@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { apiClient } from '../services/api'
+import { projectService } from '../services/projects'
 import type { Project } from '../types'
 
 export default function Projects() {
@@ -21,13 +21,9 @@ export default function Projects() {
     const loadProjects = async () => {
         try {
             setIsLoading(true)
-            setError('')
-            console.log('🔍 Loading projects...')
-            const data = await apiClient.getBoards()
-            console.log('✅ Projects loaded:', data)
+            const data = await projectService.getProjects()
             setProjects(data)
         } catch (err: any) {
-            console.error('❌ Failed to load projects:', err)
             setError(err.message || 'Failed to load projects')
         } finally {
             setIsLoading(false)
@@ -40,7 +36,7 @@ export default function Projects() {
 
         try {
             setIsCreating(true)
-            const createdProject = await apiClient.createBoard(newProject)
+            const createdProject = await projectService.createProject(newProject)
             setProjects([...projects, createdProject])
             setNewProject({ title: '', description: '' })
             setShowCreateForm(false)

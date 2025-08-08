@@ -10,10 +10,9 @@ export interface User {
 }
 
 export interface Project {
-    id: string
-    name: string
+    id: number
+    title: string
     description?: string
-    key: string
     owner_id: string
     created_at: string
     updated_at: string
@@ -99,9 +98,8 @@ export interface PaginatedResponse<T> {
 
 // Form Types
 export interface CreateProjectRequest {
-    name: string
+    title: string
     description?: string
-    key: string
 }
 
 export interface CreateSprintRequest {
