@@ -44,54 +44,27 @@ export default function Board() {
         {
             id: 'backlog',
             title: 'Backlog',
-            stories: [
-                { id: '1', title: 'User Registration', points: 5, priority: 'high', columnId: 'backlog' },
-                { id: '2', title: 'Payment Integration', points: 8, priority: 'medium', columnId: 'backlog' },
-                { id: '8', title: 'Email Notifications', points: 3, priority: 'low', columnId: 'backlog' },
-                { id: '9', title: 'User Profile Management', points: 5, priority: 'medium', columnId: 'backlog' },
-                { id: '10', title: 'Search Functionality', points: 8, priority: 'high', columnId: 'backlog' },
-                { id: '11', title: 'Data Export Feature', points: 4, priority: 'low', columnId: 'backlog' },
-                { id: '12', title: 'API Documentation', points: 6, priority: 'medium', columnId: 'backlog' },
-            ]
+            stories: []
         },
         {
             id: 'todo',
             title: 'To Do',
-            stories: [
-                { id: '3', title: 'Product Catalog', points: 3, priority: 'high', columnId: 'todo' },
-                { id: '13', title: 'Shopping Cart Implementation', points: 7, priority: 'high', columnId: 'todo' },
-                { id: '14', title: 'Order Processing', points: 9, priority: 'high', columnId: 'todo' },
-                { id: '15', title: 'Inventory Management', points: 6, priority: 'medium', columnId: 'todo' },
-            ]
+            stories: []
         },
         {
             id: 'in_progress',
             title: 'In Progress',
-            stories: [
-                { id: '4', title: 'User Authentication', points: 5, priority: 'high', columnId: 'in_progress' },
-                { id: '16', title: 'Database Optimization', points: 8, priority: 'medium', columnId: 'in_progress' },
-                { id: '17', title: 'Frontend Components', points: 4, priority: 'low', columnId: 'in_progress' },
-            ]
+            stories: []
         },
         {
             id: 'review',
             title: 'Review',
-            stories: [
-                { id: '5', title: 'Shopping Cart', points: 8, priority: 'medium', columnId: 'review' },
-                { id: '18', title: 'Payment Gateway Integration', points: 10, priority: 'high', columnId: 'review' },
-                { id: '19', title: 'User Interface Design', points: 6, priority: 'medium', columnId: 'review' },
-                { id: '20', title: 'Testing Suite', points: 5, priority: 'low', columnId: 'review' },
-            ]
+            stories: []
         },
         {
             id: 'done',
             title: 'Done',
-            stories: [
-                { id: '6', title: 'Project Setup', points: 2, priority: 'low', columnId: 'done' },
-                { id: '7', title: 'Database Design', points: 5, priority: 'medium', columnId: 'done' },
-                { id: '21', title: 'Basic Routing', points: 3, priority: 'low', columnId: 'done' },
-                { id: '22', title: 'Authentication Setup', points: 4, priority: 'medium', columnId: 'done' },
-            ]
+            stories: []
         },
     ])
 
@@ -314,26 +287,6 @@ export default function Board() {
             >
                 {/* Horizontal scrolling container */}
                 <div className="w-full flex-1 min-h-0 overflow-x-auto overflow-y-hidden relative" ref={setScrollContainerRef}>
-                    {/* Scroll indicators */}
-                    {columns.length > 3 && (
-                        <>
-                            <button
-                                onClick={scrollLeft}
-                                className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                                title="Scroll left (or use ← arrow key)"
-                            >
-                                <div className="text-gray-600 dark:text-gray-400 text-sm">←</div>
-                            </button>
-                            <button
-                                onClick={scrollRight}
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                                title="Scroll right (or use → arrow key)"
-                            >
-                                <div className="text-gray-600 dark:text-gray-400 text-sm">→</div>
-                            </button>
-                        </>
-                    )}
-                    
                     <div className="flex space-x-6 p-6 min-w-max h-full">
                         {columns.map((column) => {
                             const DroppableArea = ({ children }: { children: React.ReactNode }) => {
