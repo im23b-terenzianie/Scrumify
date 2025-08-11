@@ -9,7 +9,7 @@ export default function Sidebar() {
     const location = useLocation()
 
     return (
-        <div className="w-64 bg-white dark:bg-gray-800 shadow-sm border-r border-gray-200 dark:border-gray-700 min-h-screen">
+        <div className="w-64 bg-white dark:bg-gray-800 shadow-sm border-r border-gray-200 dark:border-gray-700 flex-shrink-0 overflow-y-auto">
             <nav className="p-4 space-y-2">
                 {navigation.map((item) => {
                     const isActive = location.pathname === item.href

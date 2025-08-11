@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type React from 'react'
 import { useParams } from 'react-router-dom'
 import {
@@ -38,6 +38,7 @@ export default function Board() {
     const [activeStory, setActiveStory] = useState<Story | null>(null)
     const [editingColumnId, setEditingColumnId] = useState<string | null>(null)
     const [editingColumnTitle, setEditingColumnTitle] = useState<string>('')
+    const [scrollContainerRef, setScrollContainerRef] = useState<HTMLDivElement | null>(null)
 
     const [columns, setColumns] = useState<Column[]>([
         {
@@ -46,6 +47,11 @@ export default function Board() {
             stories: [
                 { id: '1', title: 'User Registration', points: 5, priority: 'high', columnId: 'backlog' },
                 { id: '2', title: 'Payment Integration', points: 8, priority: 'medium', columnId: 'backlog' },
+                { id: '8', title: 'Email Notifications', points: 3, priority: 'low', columnId: 'backlog' },
+                { id: '9', title: 'User Profile Management', points: 5, priority: 'medium', columnId: 'backlog' },
+                { id: '10', title: 'Search Functionality', points: 8, priority: 'high', columnId: 'backlog' },
+                { id: '11', title: 'Data Export Feature', points: 4, priority: 'low', columnId: 'backlog' },
+                { id: '12', title: 'API Documentation', points: 6, priority: 'medium', columnId: 'backlog' },
             ]
         },
         {
@@ -53,6 +59,9 @@ export default function Board() {
             title: 'To Do',
             stories: [
                 { id: '3', title: 'Product Catalog', points: 3, priority: 'high', columnId: 'todo' },
+                { id: '13', title: 'Shopping Cart Implementation', points: 7, priority: 'high', columnId: 'todo' },
+                { id: '14', title: 'Order Processing', points: 9, priority: 'high', columnId: 'todo' },
+                { id: '15', title: 'Inventory Management', points: 6, priority: 'medium', columnId: 'todo' },
             ]
         },
         {
@@ -60,6 +69,8 @@ export default function Board() {
             title: 'In Progress',
             stories: [
                 { id: '4', title: 'User Authentication', points: 5, priority: 'high', columnId: 'in_progress' },
+                { id: '16', title: 'Database Optimization', points: 8, priority: 'medium', columnId: 'in_progress' },
+                { id: '17', title: 'Frontend Components', points: 4, priority: 'low', columnId: 'in_progress' },
             ]
         },
         {
@@ -67,6 +78,9 @@ export default function Board() {
             title: 'Review',
             stories: [
                 { id: '5', title: 'Shopping Cart', points: 8, priority: 'medium', columnId: 'review' },
+                { id: '18', title: 'Payment Gateway Integration', points: 10, priority: 'high', columnId: 'review' },
+                { id: '19', title: 'User Interface Design', points: 6, priority: 'medium', columnId: 'review' },
+                { id: '20', title: 'Testing Suite', points: 5, priority: 'low', columnId: 'review' },
             ]
         },
         {
@@ -75,6 +89,8 @@ export default function Board() {
             stories: [
                 { id: '6', title: 'Project Setup', points: 2, priority: 'low', columnId: 'done' },
                 { id: '7', title: 'Database Design', points: 5, priority: 'medium', columnId: 'done' },
+                { id: '21', title: 'Basic Routing', points: 3, priority: 'low', columnId: 'done' },
+                { id: '22', title: 'Authentication Setup', points: 4, priority: 'medium', columnId: 'done' },
             ]
         },
     ])
@@ -86,6 +102,35 @@ export default function Board() {
             },
         })
     )
+
+    // Horizontal scroll functions
+    const scrollLeft = () => {
+        if (scrollContainerRef) {
+            scrollContainerRef.scrollBy({ left: -320, behavior: 'smooth' })
+        }
+    }
+
+    const scrollRight = () => {
+        if (scrollContainerRef) {
+            scrollContainerRef.scrollBy({ left: 320, behavior: 'smooth' })
+        }
+    }
+
+    // Keyboard navigation
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault()
+                scrollLeft()
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault()
+                scrollRight()
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [scrollContainerRef])
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event
@@ -250,10 +295,15 @@ export default function Board() {
     }
 
     return (
-        <div className="space-y-6 max-w-full">
-            <div className="text-center">
+        <div className="h-full flex flex-col p-6 min-h-0">
+            <div className="text-center py-4 flex-shrink-0">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Project Board</h1>
                 <p className="text-gray-600 dark:text-gray-400">Project ID: {projectId}</p>
+                {columns.length > 3 && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        ← Scroll horizontally to see all columns →
+                    </p>
+                )}
             </div>
 
             <DndContext
@@ -262,20 +312,41 @@ export default function Board() {
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
             >
-                <div className="flex justify-center">
-                    <div className="flex space-x-6 overflow-x-auto pb-4 px-4 max-w-full">
+                {/* Horizontal scrolling container */}
+                <div className="w-full flex-1 min-h-0 overflow-x-auto overflow-y-hidden relative" ref={setScrollContainerRef}>
+                    {/* Scroll indicators */}
+                    {columns.length > 3 && (
+                        <>
+                            <button
+                                onClick={scrollLeft}
+                                className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                title="Scroll left (or use ← arrow key)"
+                            >
+                                <div className="text-gray-600 dark:text-gray-400 text-sm">←</div>
+                            </button>
+                            <button
+                                onClick={scrollRight}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full w-8 h-8 flex items-center justify-center shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                title="Scroll right (or use → arrow key)"
+                            >
+                                <div className="text-gray-600 dark:text-gray-400 text-sm">→</div>
+                            </button>
+                        </>
+                    )}
+                    
+                    <div className="flex space-x-6 p-6 min-w-max h-full">
                         {columns.map((column) => {
                             const DroppableArea = ({ children }: { children: React.ReactNode }) => {
                                 const { setNodeRef } = useDroppable({
                                     id: column.id,
                                 })
-                                return <div ref={setNodeRef} className="space-y-3 min-h-[200px]">{children}</div>
+                                return <div ref={setNodeRef} className="space-y-3 flex-1 min-h-[200px] max-h-[400px] overflow-y-auto scrollbar-thin board-column">{children}</div>
                             }
 
                             return (
                                 <div key={column.id} className="flex-shrink-0 w-80">
-                                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 group">
-                                        <div className="flex justify-between items-center mb-4">
+                                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 group h-[500px] flex flex-col">
+                                        <div className="flex justify-between items-center mb-4 flex-shrink-0">
                                             {editingColumnId === column.id ? (
                                                 <div className="flex items-center space-x-2 flex-1">
                                                     <input
@@ -339,9 +410,16 @@ export default function Board() {
                                                     <StoryCard key={story.id} story={story} />
                                                 ))}
                                             </SortableContext>
+                                            
+                                            {/* Scroll indicator when there are many stories */}
+                                            {column.stories.length > 5 && (
+                                                <div className="text-center py-2 text-xs text-gray-400 dark:text-gray-500">
+                                                    ↓ Scroll for more stories ↓
+                                                </div>
+                                            )}
                                         </DroppableArea>
 
-                                        <button className="w-full mt-3 p-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                                        <button className="w-full mt-auto mb-0 p-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0">
                                             + Add Story
                                         </button>
                                     </div>
@@ -353,7 +431,7 @@ export default function Board() {
                         <div className="flex-shrink-0 w-80">
                             <button
                                 onClick={addColumn}
-                                className="w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center justify-center space-x-2"
+                                className="w-full h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center justify-center space-x-2"
                             >
                                 <Plus size={20} />
                                 <span>Add Column</span>
