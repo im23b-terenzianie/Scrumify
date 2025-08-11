@@ -47,7 +47,8 @@
 /* Ensure proper height calculations */
 .h-screen {
   height: 100vh;
-  height: 100dvh; /* Dynamic viewport height for mobile */
+  height: 100dvh;
+  /* Dynamic viewport height for mobile */
 }
 
 /* Smooth scrolling for the main content area */
@@ -57,7 +58,8 @@
 
 /* Ensure the board content doesn't overflow the container */
 .board-container {
-  height: calc(100vh - 120px); /* Adjust based on header height */
+  height: calc(100vh - 120px);
+  /* Adjust based on header height */
   height: calc(100dvh - 120px);
 }
 
@@ -137,3 +139,5 @@
 .overflow-x-auto {
   scroll-behavior: smooth;
 }
+
+;
