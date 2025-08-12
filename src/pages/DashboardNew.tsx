@@ -250,16 +250,29 @@ export default function Dashboard() {
                                         <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{day.date}</p>
                                         <div className="space-y-1">
                                             <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded relative overflow-hidden">
+                                                {/* Total Stories Bar (Background) */}
                                                 <div
-                                                    className="absolute bottom-0 w-full bg-blue-500 transition-all duration-300"
+                                                    className="absolute bottom-0 w-full bg-blue-500/30 transition-all duration-300"
                                                     style={{
                                                         height: `${Math.min(100, Math.max(0, storiesHeight))}%`
                                                     }}
                                                 />
+                                                {/* Completed Stories Bar (Foreground) */}
+                                                <div
+                                                    className="absolute bottom-0 w-full bg-green-500 transition-all duration-300"
+                                                    style={{
+                                                        height: `${Math.min(100, Math.max(0, completedHeight))}%`
+                                                    }}
+                                                />
                                             </div>
-                                            <p className="text-xs font-medium text-gray-900 dark:text-white">
-                                                {Number(day.stories) || 0}
-                                            </p>
+                                            <div className="text-xs">
+                                                <p className="font-medium text-gray-900 dark:text-white">
+                                                    {Number(day.stories) || 0} total
+                                                </p>
+                                                <p className="text-green-600 dark:text-green-400">
+                                                    {Number(day.completed) || 0} done
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 );
