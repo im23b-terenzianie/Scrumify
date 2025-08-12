@@ -1,19 +1,45 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-
-type Story = {
-    id: string
-    title: string
-    points: number
-    priority: 'high' | 'medium' | 'low'
-    columnId: string
-}
+import { StoryPriority, type UserStory } from '../types/userStory'
 
 interface StoryCardProps {
-    story: Story
+    story: UserStory
+    onClick?: () => void
 }
 
-export default function StoryCard({ story }: StoryCardProps) {
+const getPriorityColor = (priority: StoryPriority) => {
+    switch (priority) {
+        case StoryPriority.CRITICAL:  // 8
+            return 'bg-red-600 text-white dark:bg-red-700'
+        case StoryPriority.URGENT:    // 5
+            return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+        case StoryPriority.HIGH:      // 3
+            return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+        case StoryPriority.MEDIUM:    // 2
+            return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+        case StoryPriority.LOW:       // 1
+        default:
+            return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+    }
+}
+
+const getPriorityLabel = (priority: StoryPriority): string => {
+    switch (priority) {
+        case StoryPriority.CRITICAL:
+            return "🚨 Critical (8)";
+        case StoryPriority.URGENT:
+            return "🔴 Urgent (5)";
+        case StoryPriority.HIGH:
+            return "🟠 High (3)";
+        case StoryPriority.MEDIUM:
+            return "🟡 Medium (2)";
+        case StoryPriority.LOW:
+        default:
+            return "🟢 Low (1)";
+    }
+}
+
+export default function StoryCard({ story, onClick }: StoryCardProps) {
     const {
         attributes,
         listeners,
@@ -21,12 +47,20 @@ export default function StoryCard({ story }: StoryCardProps) {
         transform,
         transition,
         isDragging,
-    } = useSortable({ id: story.id })
+    } = useSortable({ id: story.id.toString() })
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
     }
+
+    const handleClick = (e: React.MouseEvent) => {
+        // Nur klicken wenn nicht gedraggt wird
+        if (!isDragging && onClick) {
+            e.stopPropagation();
+            onClick();
+        }
+    };
 
     return (
         <div
@@ -34,29 +68,40 @@ export default function StoryCard({ story }: StoryCardProps) {
             style={style}
             {...attributes}
             {...listeners}
+            onClick={handleClick}
             className={`
                 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border 
                 dark:border-gray-700 cursor-pointer hover:shadow-md 
-                transition-shadow
+                transition-all duration-200 hover:scale-[1.02]
                 ${isDragging ? 'opacity-50' : ''}
             `}
         >
             <h4 className="font-medium text-gray-900 dark:text-white mb-2">
                 {story.title}
             </h4>
+
+            {story.description && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+                    {story.description}
+                </p>
+            )}
+
             <div className="flex justify-between items-center">
-                <span className={`px-2 py-1 text-xs rounded-full ${story.priority === 'high'
-                        ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                        : story.priority === 'medium'
-                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                    }`}>
-                    {story.priority}
+                <span className={`px-2 py-1 text-xs rounded-full ${getPriorityColor(story.priority)}`}>
+                    {getPriorityLabel(story.priority)}
                 </span>
-                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                    {story.points} pts
-                </span>
+                {story.story_points && (
+                    <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                        {story.story_points} pts
+                    </span>
+                )}
             </div>
+
+            {story.assignee && (
+                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Assigned to: {story.assignee.username}
+                </div>
+            )}
         </div>
     )
 }

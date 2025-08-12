@@ -16,57 +16,74 @@ import {
     SortableContext,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { Plus, Edit2, Trash2 } from 'lucide-react'
+import { Plus, Edit2, AlertCircle } from 'lucide-react'
 import StoryCard from '../components/StoryCard'
+import AddStoryForm from '../components/AddStoryForm'
+import StoryDetailModal from '../components/StoryDetailModal'
+import { useKanban } from '../hooks/useKanban'
+import { StoryStatus, StoryPriority, type UserStory, type UserStoryCreate } from '../types/userStory'
 
-type Story = {
-    id: string
-    title: string
-    points: number
-    priority: 'high' | 'medium' | 'low'
-    columnId: string
-}
+//  Status-zu-Spalten-Mapping - EXAKT nach Backend Schema
+const COLUMN_CONFIG = [
+    { id: 'todo', title: 'To Do', status: StoryStatus.TODO },
+    { id: 'in_progress', title: 'In Progress', status: StoryStatus.IN_PROGRESS },
+    { id: 'in_review', title: 'In Review', status: StoryStatus.IN_REVIEW },
+    { id: 'done', title: 'Done', status: StoryStatus.DONE },
+] as const
 
 type Column = {
     id: string
     title: string
-    stories: Story[]
+    status: StoryStatus
+    stories: UserStory[]
 }
 
 export default function Board() {
     const { projectId } = useParams()
-    const [activeStory, setActiveStory] = useState<Story | null>(null)
+    const boardId = projectId ? parseInt(projectId) : 1 // Default board ID
+
+    //  Kanban Hook f�r API-Integration
+    const {
+        stories,
+        loading,
+        error,
+        createStory,
+        moveStory,
+        getStoriesByStatus
+    } = useKanban(boardId)
+
+    // UI State
+    const [activeStory, setActiveStory] = useState<UserStory | null>(null)
     const [editingColumnId, setEditingColumnId] = useState<string | null>(null)
     const [editingColumnTitle, setEditingColumnTitle] = useState<string>('')
+    const [showAddStoryForm, setShowAddStoryForm] = useState<StoryStatus | null>(null)
+    const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
     const [scrollContainerRef, setScrollContainerRef] = useState<HTMLDivElement | null>(null)
 
-    const [columns, setColumns] = useState<Column[]>([
-        {
-            id: 'backlog',
-            title: 'Backlog',
-            stories: []
-        },
-        {
-            id: 'todo',
-            title: 'To Do',
-            stories: []
-        },
-        {
-            id: 'in_progress',
-            title: 'In Progress',
-            stories: []
-        },
-        {
-            id: 'review',
-            title: 'Review',
-            stories: []
-        },
-        {
-            id: 'done',
-            title: 'Done',
-            stories: []
-        },
-    ])
+    //  Spalten mit Stories aus dem Backend
+    const columns: Column[] = COLUMN_CONFIG.map(config => ({
+        ...config,
+        stories: getStoriesByStatus(config.status)
+    }))
+
+    //  NEUE STORY ERSTELLEN - Backend Guide kompatibel
+    const handleCreateStory = async (storyData: Omit<UserStoryCreate, 'board_id'>) => {
+        // Füge den Status der aktuellen Spalte hinzu
+        const completeStoryData = {
+            ...storyData,
+            status: showAddStoryForm || StoryStatus.TODO,
+        }
+
+        const success = await createStory(completeStoryData)
+        if (success) {
+            setShowAddStoryForm(null)
+        }
+    }
+
+    // ✅ STORY DETAIL MODAL ÖFFNEN
+    const handleStoryClick = (story: UserStory) => {
+        setSelectedStory(story);
+    };
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -76,7 +93,6 @@ export default function Board() {
         })
     )
 
-    // Horizontal scroll functions
     const scrollLeft = () => {
         if (scrollContainerRef) {
             scrollContainerRef.scrollBy({ left: -320, behavior: 'smooth' })
@@ -89,7 +105,6 @@ export default function Board() {
         }
     }
 
-    // Keyboard navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'ArrowLeft') {
@@ -107,141 +122,31 @@ export default function Board() {
 
     const handleDragStart = (event: DragStartEvent) => {
         const { active } = event
-        const story = findStoryById(active.id as string)
+        const story = findStoryById(active.id.toString())
         setActiveStory(story)
     }
 
-    const handleDragEnd = (event: DragEndEvent) => {
+    const handleDragEnd = async (event: DragEndEvent) => {
         const { active, over } = event
         setActiveStory(null)
 
         if (!over) return
 
-        const activeStoryId = active.id as string
+        const activeStoryId = parseInt(active.id.toString())
         const overId = over.id as string
 
-        // Find the active story and its current column
-        const activeStory = findStoryById(activeStoryId)
+        const activeStory = stories.find(s => s.id === activeStoryId)
         if (!activeStory) return
 
-        const activeColumn = findColumnByStoryId(activeStoryId)
-        const overColumn = findColumnById(overId) || findColumnByStoryId(overId)
+        const overColumn = COLUMN_CONFIG.find(col => col.id === overId)
 
-        if (!activeColumn || !overColumn) return
-
-        // If dropping in the same column, reorder
-        if (activeColumn.id === overColumn.id) {
-            const columnIndex = columns.findIndex(col => col.id === activeColumn.id)
-            const activeIndex = activeColumn.stories.findIndex(story => story.id === activeStoryId)
-            const overIndex = activeColumn.stories.findIndex(story => story.id === overId)
-
-            if (activeIndex !== overIndex) {
-                const newStories = [...activeColumn.stories]
-                const [removed] = newStories.splice(activeIndex, 1)
-                newStories.splice(overIndex, 0, removed)
-
-                const newColumns = [...columns]
-                newColumns[columnIndex] = {
-                    ...activeColumn,
-                    stories: newStories
-                }
-                setColumns(newColumns)
-            }
-        } else {
-            // Moving to a different column
-            moveStoryToColumn(activeStoryId, activeColumn.id, overColumn.id)
+        if (overColumn && activeStory.status !== overColumn.status) {
+            await moveStory(activeStoryId, overColumn.status)
         }
     }
 
-    const findStoryById = (id: string): Story | null => {
-        for (const column of columns) {
-            const story = column.stories.find(story => story.id === id)
-            if (story) return story
-        }
-        return null
-    }
-
-    const findColumnById = (id: string): Column | null => {
-        return columns.find(column => column.id === id) || null
-    }
-
-    const findColumnByStoryId = (storyId: string): Column | null => {
-        for (const column of columns) {
-            if (column.stories.some(story => story.id === storyId)) {
-                return column
-            }
-        }
-        return null
-    }
-
-    const moveStoryToColumn = (storyId: string, fromColumnId: string, toColumnId: string) => {
-        const fromColumnIndex = columns.findIndex(col => col.id === fromColumnId)
-        const toColumnIndex = columns.findIndex(col => col.id === toColumnId)
-
-        if (fromColumnIndex === -1 || toColumnIndex === -1) return
-
-        const fromColumn = columns[fromColumnIndex]
-        const toColumn = columns[toColumnIndex]
-
-        const storyIndex = fromColumn.stories.findIndex(story => story.id === storyId)
-        if (storyIndex === -1) return
-
-        const story = fromColumn.stories[storyIndex]
-        const updatedStory = { ...story, columnId: toColumnId }
-
-        const newFromStories = fromColumn.stories.filter(story => story.id !== storyId)
-        const newToStories = [...toColumn.stories, updatedStory]
-
-        const newColumns = [...columns]
-        newColumns[fromColumnIndex] = { ...fromColumn, stories: newFromStories }
-        newColumns[toColumnIndex] = { ...toColumn, stories: newToStories }
-
-        setColumns(newColumns)
-    }
-
-    const addColumn = () => {
-        const newColumnId = `column-${Date.now()}`
-        const newColumn: Column = {
-            id: newColumnId,
-            title: 'New Column',
-            stories: []
-        }
-        setColumns([...columns, newColumn])
-    }
-
-    const deleteColumn = (columnId: string) => {
-        if (columns.length <= 1) return // Don't allow deleting the last column
-
-        const columnToDelete = columns.find(col => col.id === columnId)
-        if (!columnToDelete) return
-
-        // If the column has stories, move them to the first remaining column
-        if (columnToDelete.stories.length > 0) {
-            const remainingColumns = columns.filter(col => col.id !== columnId)
-            if (remainingColumns.length > 0) {
-                const targetColumn = remainingColumns[0]
-                const updatedStories = columnToDelete.stories.map(story => ({
-                    ...story,
-                    columnId: targetColumn.id
-                }))
-
-                const newColumns = columns.map(col => {
-                    if (col.id === targetColumn.id) {
-                        return { ...col, stories: [...col.stories, ...updatedStories] }
-                    }
-                    if (col.id === columnId) {
-                        return null // This will be filtered out
-                    }
-                    return col
-                }).filter(Boolean) as Column[]
-
-                setColumns(newColumns)
-                return
-            }
-        }
-
-        // If no stories to move, just delete the column
-        setColumns(columns.filter(col => col.id !== columnId))
+    const findStoryById = (id: string): UserStory | null => {
+        return stories.find(story => story.id === parseInt(id)) || null
     }
 
     const startEditingColumn = (columnId: string, currentTitle: string) => {
@@ -251,13 +156,6 @@ export default function Board() {
 
     const saveColumnTitle = () => {
         if (!editingColumnId || !editingColumnTitle.trim()) return
-
-        const newColumns = columns.map(col =>
-            col.id === editingColumnId
-                ? { ...col, title: editingColumnTitle.trim() }
-                : col
-        )
-        setColumns(newColumns)
         setEditingColumnId(null)
         setEditingColumnTitle('')
     }
@@ -267,6 +165,25 @@ export default function Board() {
         setEditingColumnTitle('')
     }
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-lg text-gray-600">Loading stories...</div>
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="flex items-center gap-2 text-red-600">
+                    <AlertCircle className="w-5 h-5" />
+                    <span>Error: {error}</span>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div className="h-full flex flex-col p-6 min-h-0">
             <div className="text-center py-4 flex-shrink-0">
@@ -274,7 +191,7 @@ export default function Board() {
                 <p className="text-gray-600 dark:text-gray-400">Project ID: {projectId}</p>
                 {columns.length > 3 && (
                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        ← Scroll horizontally to see all columns →
+                        Scroll horizontally to see all columns
                     </p>
                 )}
             </div>
@@ -285,7 +202,6 @@ export default function Board() {
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
             >
-                {/* Horizontal scrolling container */}
                 <div className="w-full flex-1 min-h-0 overflow-x-auto overflow-y-hidden relative" ref={setScrollContainerRef}>
                     <div className="flex space-x-6 p-6 min-w-max h-full">
                         {columns.map((column) => {
@@ -317,13 +233,13 @@ export default function Board() {
                                                         onClick={saveColumnTitle}
                                                         className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 p-1"
                                                     >
-                                                        ✓
+
                                                     </button>
                                                     <button
                                                         onClick={cancelEditingColumn}
                                                         className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300 p-1"
                                                     >
-                                                        ✕
+
                                                     </button>
                                                 </div>
                                             ) : (
@@ -343,53 +259,48 @@ export default function Board() {
                                                 <span className="bg-gray-500 dark:bg-gray-600 text-white text-xs px-2 py-1 rounded-full">
                                                     {column.stories.length}
                                                 </span>
-                                                {columns.length > 1 && (
-                                                    <button
-                                                        onClick={() => deleteColumn(column.id)}
-                                                        className="text-red-400 hover:text-red-600 dark:text-red-500 dark:hover:text-red-400 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                                    >
-                                                        <Trash2 size={14} />
-                                                    </button>
-                                                )}
                                             </div>
                                         </div>
 
                                         <DroppableArea>
                                             <SortableContext
-                                                items={column.stories.map(story => story.id)}
+                                                items={column.stories.map(story => story.id.toString())}
                                                 strategy={verticalListSortingStrategy}
                                             >
                                                 {column.stories.map((story) => (
-                                                    <StoryCard key={story.id} story={story} />
+                                                    <StoryCard
+                                                        key={story.id}
+                                                        story={story}
+                                                        onClick={() => handleStoryClick(story)}
+                                                    />
                                                 ))}
                                             </SortableContext>
-                                            
-                                            {/* Scroll indicator when there are many stories */}
+
                                             {column.stories.length > 5 && (
                                                 <div className="text-center py-2 text-xs text-gray-400 dark:text-gray-500">
-                                                    ↓ Scroll for more stories ↓
+                                                    Scroll for more stories
                                                 </div>
                                             )}
                                         </DroppableArea>
 
-                                        <button className="w-full mt-auto mb-0 p-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0">
-                                            + Add Story
-                                        </button>
+                                        {showAddStoryForm === column.status ? (
+                                            <AddStoryForm
+                                                onSubmit={handleCreateStory}
+                                                onCancel={() => setShowAddStoryForm(null)}
+                                            />
+                                        ) : (
+                                            <button
+                                                onClick={() => setShowAddStoryForm(column.status)}
+                                                className="w-full mt-auto mb-0 p-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex-shrink-0 flex items-center justify-center gap-2"
+                                            >
+                                                <Plus size={16} />
+                                                Add Story
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             )
                         })}
-
-                        {/* Add Column Button */}
-                        <div className="flex-shrink-0 w-80">
-                            <button
-                                onClick={addColumn}
-                                className="w-full h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center justify-center space-x-2"
-                            >
-                                <Plus size={20} />
-                                <span>Add Column</span>
-                            </button>
-                        </div>
                     </div>
                 </div>
 
@@ -400,22 +311,34 @@ export default function Board() {
                                 {activeStory.title}
                             </h4>
                             <div className="flex justify-between items-center">
-                                <span className={`px-2 py-1 text-xs rounded-full ${activeStory.priority === 'high'
-                                    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                                    : activeStory.priority === 'medium'
-                                        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                        : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                <span className={`px-2 py-1 text-xs rounded-full ${activeStory.priority === StoryPriority.CRITICAL || activeStory.priority === StoryPriority.URGENT
+                                        ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                                        : activeStory.priority === StoryPriority.HIGH
+                                            ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+                                            : activeStory.priority === StoryPriority.MEDIUM
+                                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                                : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                                     }`}>
                                     {activeStory.priority}
                                 </span>
-                                <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                                    {activeStory.points} pts
-                                </span>
+                                {activeStory.story_points && (
+                                    <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                                        {activeStory.story_points} pts
+                                    </span>
+                                )}
                             </div>
                         </div>
                     ) : null}
                 </DragOverlay>
             </DndContext>
+
+            {/* Story Detail Modal */}
+            {selectedStory && (
+                <StoryDetailModal
+                    story={selectedStory}
+                    onClose={() => setSelectedStory(null)}
+                />
+            )}
         </div>
     )
 }
