@@ -61,12 +61,18 @@ export default function Board() {
     const [showAddStoryForm, setShowAddStoryForm] = useState<StoryStatus | null>(null)
     const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
     const [scrollContainerRef, setScrollContainerRef] = useState<HTMLDivElement | null>(null)
+    const [customColumns, setCustomColumns] = useState<Column[]>([])
+    const [showAddColumn, setShowAddColumn] = useState(false)
+    const [newColumnTitle, setNewColumnTitle] = useState('')
 
-    //  Spalten mit Stories aus dem Backend
-    const columns: Column[] = COLUMN_CONFIG.map(config => ({
-        ...config,
-        stories: getStoriesByStatus(config.status)
-    }))
+    //  Spalten mit Stories aus dem Backend + Custom Columns
+    const columns: Column[] = [
+        ...COLUMN_CONFIG.map(config => ({
+            ...config,
+            stories: getStoriesByStatus(config.status)
+        })),
+        ...customColumns
+    ]
 
     //  NEUE STORY ERSTELLEN - Backend Guide kompatibel
     const handleCreateStory = async (storyData: Omit<UserStoryCreate, 'board_id'>) => {
@@ -165,6 +171,25 @@ export default function Board() {
     const cancelEditingColumn = () => {
         setEditingColumnId(null)
         setEditingColumnTitle('')
+    }
+
+    // ✅ ADD COLUMN FUNKTIONEN
+    const handleAddColumn = () => {
+        if (newColumnTitle.trim()) {
+            const newColumn: Column = {
+                id: `custom_${Date.now()}`,
+                title: newColumnTitle.trim(),
+                status: StoryStatus.TODO, // Default status for custom columns
+                stories: []
+            }
+            setCustomColumns(prev => [...prev, newColumn])
+            setNewColumnTitle('')
+            setShowAddColumn(false)
+        }
+    }
+
+    const handleDeleteColumn = (columnId: string) => {
+        setCustomColumns(prev => prev.filter(col => col.id !== columnId))
     }
 
     if (loading) {
@@ -266,6 +291,16 @@ export default function Board() {
                                                     >
                                                         <Edit2 size={14} />
                                                     </button>
+                                                    {/* Delete button for custom columns */}
+                                                    {column.id.startsWith('custom_') && (
+                                                        <button
+                                                            onClick={() => handleDeleteColumn(column.id)}
+                                                            className="text-red-400 hover:text-red-600 dark:hover:text-red-300 p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                            title="Delete Column"
+                                                        >
+                                                            🗑️
+                                                        </button>
+                                                    )}
                                                 </div>
                                             )}
                                             <div className="flex items-center space-x-2">
@@ -314,6 +349,89 @@ export default function Board() {
                                 </div>
                             )
                         })}
+
+                        {/* Add Column */}
+                        <div className="flex-shrink-0 w-80">
+                            {showAddColumn ? (
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl p-6 h-[500px] border-2 border-blue-200 dark:border-blue-700 shadow-lg backdrop-blur-sm">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <Plus className="w-5 h-5 text-white" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Add New Column
+                                        </h3>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                Column Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g., Testing, Review, Archive..."
+                                                value={newColumnTitle}
+                                                onChange={(e) => setNewColumnTitle(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') handleAddColumn()
+                                                    if (e.key === 'Escape') setShowAddColumn(false)
+                                                }}
+                                                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
+                                                autoFocus
+                                            />
+                                        </div>
+
+                                        <div className="flex gap-3 pt-4">
+                                            <button
+                                                onClick={handleAddColumn}
+                                                disabled={!newColumnTitle.trim()}
+                                                className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+                                            >
+                                                <Plus className="w-4 h-4" />
+                                                Create Column
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setShowAddColumn(false)
+                                                    setNewColumnTitle('')
+                                                }}
+                                                className="px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-5 h-5 text-blue-500 mt-0.5">💡</div>
+                                            <div>
+                                                <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                                                    Pro Tip
+                                                </p>
+                                                <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                                                    Custom columns help organize your workflow. You can add stages like "Testing", "Code Review", or "Deployment".
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => setShowAddColumn(true)}
+                                    className="w-full h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-gray-500 dark:text-gray-400 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-300 flex flex-col items-center justify-center gap-4 group"
+                                >
+                                    <div className="w-16 h-16 border-2 border-dashed border-current rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                        <Plus size={28} />
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-lg font-medium mb-1">Add Column</div>
+                                        <div className="text-sm opacity-70">Create a custom workflow stage</div>
+                                    </div>
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
 
