@@ -48,7 +48,9 @@ export default function Board() {
         loading,
         error,
         createStory,
+        updateStory,
         moveStory,
+        deleteStory,
         getStoriesByStatus
     } = useKanban(boardId)
 
@@ -312,12 +314,12 @@ export default function Board() {
                             </h4>
                             <div className="flex justify-between items-center">
                                 <span className={`px-2 py-1 text-xs rounded-full ${activeStory.priority === StoryPriority.CRITICAL || activeStory.priority === StoryPriority.URGENT
-                                        ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                                        : activeStory.priority === StoryPriority.HIGH
-                                            ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
-                                            : activeStory.priority === StoryPriority.MEDIUM
-                                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                                : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                    ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                                    : activeStory.priority === StoryPriority.HIGH
+                                        ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+                                        : activeStory.priority === StoryPriority.MEDIUM
+                                            ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                            : 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                                     }`}>
                                     {activeStory.priority}
                                 </span>
@@ -337,6 +339,25 @@ export default function Board() {
                 <StoryDetailModal
                     story={selectedStory}
                     onClose={() => setSelectedStory(null)}
+                    onEdit={async (storyId, updates) => {
+                        console.log('🔄 Updating story:', storyId, updates);
+                        const success = await updateStory(storyId, updates);
+                        if (success) {
+                            // Find the updated story and update selectedStory
+                            const updatedStory = stories.find(s => s.id === storyId);
+                            if (updatedStory) {
+                                console.log('✅ Story updated, refreshing modal:', updatedStory);
+                                setSelectedStory(updatedStory);
+                            }
+                        }
+                    }}
+                    onDelete={async (storyId) => {
+                        console.log('🗑️ Deleting story:', storyId);
+                        const success = await deleteStory(storyId);
+                        if (success) {
+                            setSelectedStory(null);
+                        }
+                    }}
                 />
             )}
         </div>

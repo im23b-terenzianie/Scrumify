@@ -87,6 +87,24 @@ export const useKanban = (boardId: number) => {
         }
     };
 
+    // ✅ STORY BEARBEITEN/AKTUALISIEREN
+    const updateStory = async (storyId: number, updates: Partial<UserStoryCreate>): Promise<boolean> => {
+        try {
+            setError(null);
+            const updatedStory = await UserStoryService.updateStory(storyId, updates);
+            setState((prev) => ({
+                ...prev,
+                stories: prev.stories.map((story) =>
+                    story.id === storyId ? updatedStory : story
+                ),
+            }));
+            return true;
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Failed to update story');
+            return false;
+        }
+    };
+
     // ✅ STORY LÖSCHEN
     const deleteStory = async (storyId: number): Promise<boolean> => {
         try {
@@ -117,6 +135,7 @@ export const useKanban = (boardId: number) => {
         // Actions
         loadStories,
         createStory,
+        updateStory,
         moveStory,
         deleteStory,
 

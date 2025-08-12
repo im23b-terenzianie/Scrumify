@@ -9,9 +9,9 @@ interface StoryCardProps {
 
 const getPriorityColor = (priority: StoryPriority) => {
     switch (priority) {
-        case StoryPriority.CRITICAL:  // 8
+        case StoryPriority.CRITICAL:  // 5
             return 'bg-red-600 text-white dark:bg-red-700'
-        case StoryPriority.URGENT:    // 5
+        case StoryPriority.URGENT:    // 4
             return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
         case StoryPriority.HIGH:      // 3
             return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
@@ -26,16 +26,16 @@ const getPriorityColor = (priority: StoryPriority) => {
 const getPriorityLabel = (priority: StoryPriority): string => {
     switch (priority) {
         case StoryPriority.CRITICAL:
-            return "🚨 Critical (8)";
+            return "🚨 Critical";
         case StoryPriority.URGENT:
-            return "🔴 Urgent (5)";
+            return "🔴 Urgent";
         case StoryPriority.HIGH:
-            return "🟠 High (3)";
+            return "🟠 High";
         case StoryPriority.MEDIUM:
-            return "🟡 Medium (2)";
+            return "🟡 Medium";
         case StoryPriority.LOW:
         default:
-            return "🟢 Low (1)";
+            return "🟢 Low";
     }
 }
 

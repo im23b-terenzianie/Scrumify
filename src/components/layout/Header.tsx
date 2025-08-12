@@ -54,11 +54,18 @@ export default function Header() {
                                                 <div className="font-medium">{user.full_name || user.username}</div>
                                                 <div className="text-gray-500 dark:text-gray-400">{user.email}</div>
                                             </div>
+                                            <Link
+                                                to="/profile"
+                                                onClick={() => setShowDropdown(false)}
+                                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                            >
+                                                👤 Profile Settings
+                                            </Link>
                                             <button
                                                 onClick={handleLogout}
                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                             >
-                                                Sign out
+                                                🚪 Sign out
                                             </button>
                                         </div>
                                     )}
