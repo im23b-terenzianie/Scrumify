@@ -9,7 +9,7 @@ import {
     PointerSensor,
     useSensor,
     useSensors,
-    closestCorners,
+    closestCenter,
     useDroppable,
 } from '@dnd-kit/core'
 import {
@@ -90,7 +90,7 @@ export default function Board() {
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
-                distance: 8,
+                distance: 3, // Reduced for smoother start
             },
         })
     )
@@ -200,7 +200,7 @@ export default function Board() {
 
             <DndContext
                 sensors={sensors}
-                collisionDetection={closestCorners}
+                collisionDetection={closestCenter}
                 onDragStart={handleDragStart}
                 onDragEnd={handleDragEnd}
             >
@@ -208,15 +208,26 @@ export default function Board() {
                     <div className="flex space-x-6 p-6 min-w-max h-full">
                         {columns.map((column) => {
                             const DroppableArea = ({ children }: { children: React.ReactNode }) => {
-                                const { setNodeRef } = useDroppable({
+                                const { setNodeRef, isOver } = useDroppable({
                                     id: column.id,
                                 })
-                                return <div ref={setNodeRef} className="space-y-3 flex-1 min-h-[200px] max-h-[400px] overflow-y-auto scrollbar-thin board-column">{children}</div>
+                                return (
+                                    <div
+                                        ref={setNodeRef}
+                                        className={`
+                                            space-y-3 flex-1 min-h-[200px] max-h-[400px] overflow-y-auto overflow-x-hidden scrollbar-thin board-column
+                                            transition-all duration-200 ease-out rounded-lg p-2
+                                            ${isOver ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-600' : ''}
+                                        `}
+                                    >
+                                        {children}
+                                    </div>
+                                )
                             }
 
                             return (
                                 <div key={column.id} className="flex-shrink-0 w-80">
-                                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 group h-[500px] flex flex-col">
+                                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 group h-[500px] flex flex-col overflow-hidden">
                                         <div className="flex justify-between items-center mb-4 flex-shrink-0">
                                             {editingColumnId === column.id ? (
                                                 <div className="flex items-center space-x-2 flex-1">
@@ -306,9 +317,12 @@ export default function Board() {
                     </div>
                 </div>
 
-                <DragOverlay>
+                <DragOverlay dropAnimation={{
+                    duration: 300,
+                    easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+                }}>
                     {activeStory ? (
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border dark:border-gray-700 rotate-3 scale-105">
+                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-2xl border dark:border-gray-700 rotate-6 scale-110 opacity-90">
                             <h4 className="font-medium text-gray-900 dark:text-white mb-2">
                                 {activeStory.title}
                             </h4>

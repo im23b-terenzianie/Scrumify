@@ -51,7 +51,8 @@ export default function StoryCard({ story, onClick }: StoryCardProps) {
 
     const style = {
         transform: CSS.Transform.toString(transform),
-        transition,
+        transition: isDragging ? 'none' : transition, // Disable transition while dragging for smoother feel
+        zIndex: isDragging ? 1000 : 'auto',
     }
 
     const handleClick = (e: React.MouseEvent) => {
@@ -72,8 +73,9 @@ export default function StoryCard({ story, onClick }: StoryCardProps) {
             className={`
                 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border 
                 dark:border-gray-700 cursor-pointer hover:shadow-md 
-                transition-all duration-200 hover:scale-[1.02]
-                ${isDragging ? 'opacity-50' : ''}
+                transition-all duration-150 ease-out
+                ${isDragging ? 'opacity-60 scale-105 shadow-xl' : 'hover:scale-[1.02]'}
+                ${isDragging ? 'rotate-3' : ''}
             `}
         >
             <h4 className="font-medium text-gray-900 dark:text-white mb-2">
