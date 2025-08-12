@@ -353,42 +353,82 @@ export default function Board() {
                         {/* Add Column */}
                         <div className="flex-shrink-0 w-80">
                             {showAddColumn ? (
-                                <div className="bg-gray-50 dark:bg-gray-750 rounded-lg p-4 h-[500px] border-2 border-dashed border-blue-300 dark:border-blue-600">
-                                    <h3 className="font-medium text-gray-900 dark:text-white mb-4">Add New Column</h3>
-                                    <input
-                                        type="text"
-                                        placeholder="Column Title"
-                                        value={newColumnTitle}
-                                        onChange={(e) => setNewColumnTitle(e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') handleAddColumn()
-                                            if (e.key === 'Escape') setShowAddColumn(false)
-                                        }}
-                                        className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-4"
-                                        autoFocus
-                                    />
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={handleAddColumn}
-                                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                                        >
-                                            Add
-                                        </button>
-                                        <button
-                                            onClick={() => setShowAddColumn(false)}
-                                            className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-                                        >
-                                            Cancel
-                                        </button>
+                                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl p-6 h-[500px] border-2 border-blue-200 dark:border-blue-700 shadow-lg backdrop-blur-sm">
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <Plus className="w-5 h-5 text-white" />
+                                        </div>
+                                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                                            Add New Column
+                                        </h3>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                                Column Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g., Testing, Review, Archive..."
+                                                value={newColumnTitle}
+                                                onChange={(e) => setNewColumnTitle(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') handleAddColumn()
+                                                    if (e.key === 'Escape') setShowAddColumn(false)
+                                                }}
+                                                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 shadow-sm"
+                                                autoFocus
+                                            />
+                                        </div>
+
+                                        <div className="flex gap-3 pt-4">
+                                            <button
+                                                onClick={handleAddColumn}
+                                                disabled={!newColumnTitle.trim()}
+                                                className="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+                                            >
+                                                <Plus className="w-4 h-4" />
+                                                Create Column
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setShowAddColumn(false)
+                                                    setNewColumnTitle('')
+                                                }}
+                                                className="px-4 py-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
+                                        <div className="flex items-start gap-3">
+                                            <div className="w-5 h-5 text-blue-500 mt-0.5">💡</div>
+                                            <div>
+                                                <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">
+                                                    Pro Tip
+                                                </p>
+                                                <p className="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
+                                                    Custom columns help organize your workflow. You can add stages like "Testing", "Code Review", or "Deployment".
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
                                 <button
                                     onClick={() => setShowAddColumn(true)}
-                                    className="w-full h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors flex items-center justify-center gap-2"
+                                    className="w-full h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-gray-500 dark:text-gray-400 hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-300 flex flex-col items-center justify-center gap-4 group"
                                 >
-                                    <Plus size={20} />
-                                    Add Column
+                                    <div className="w-16 h-16 border-2 border-dashed border-current rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                                        <Plus size={28} />
+                                    </div>
+                                    <div className="text-center">
+                                        <div className="text-lg font-medium mb-1">Add Column</div>
+                                        <div className="text-sm opacity-70">Create a custom workflow stage</div>
+                                    </div>
                                 </button>
                             )}
                         </div>
