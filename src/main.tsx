@@ -5,6 +5,9 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 
+// Import API test for debugging
+import './utils/dashboardApiTest'
+
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
