@@ -7,11 +7,11 @@ export enum StoryStatus {
 }
 
 export enum StoryPriority {
-  LOW = 1,         // 🟢 Fibonacci: 1
-  MEDIUM = 2,      // 🟡 Fibonacci: 2  
-  HIGH = 3,        // 🟠 Fibonacci: 3
-  URGENT = 5,      // 🔴 Fibonacci: 5
-  CRITICAL = 8,    // 🚨 Fibonacci: 8
+  LOW = 1,         // 🟢 Backend: 1
+  MEDIUM = 2,      // 🟡 Backend: 2  
+  HIGH = 3,        // 🟠 Backend: 3
+  URGENT = 4,      // 🔴 Backend: 4
+  CRITICAL = 5,    // 🚨 Backend: 5 (Highest)
 }
 
 // Interface f�r das Erstellen einer Story
@@ -58,11 +58,11 @@ export const getPriorityNumber = (priority: StoryPriority | string): number => {
   if (typeof priority === 'number') return priority;
 
   const map: Record<string, number> = {
-    'LOW': 1,      // Fibonacci
-    'MEDIUM': 2,   // Fibonacci
-    'HIGH': 3,     // Fibonacci
-    'URGENT': 5,   // Fibonacci
-    'CRITICAL': 8  // Fibonacci
+    'LOW': 1,      // Backend: 1
+    'MEDIUM': 2,   // Backend: 2
+    'HIGH': 3,     // Backend: 3
+    'URGENT': 4,   // Backend: 4
+    'CRITICAL': 5  // Backend: 5
   };
   return map[priority] || StoryPriority.MEDIUM;
 }; export const getStatusString = (status: StoryStatus | string): string => {

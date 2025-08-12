@@ -28,19 +28,6 @@ export default function Dashboard() {
                 </button>
             </div>
 
-            {/* Debug Information (only in development) */}
-            {process.env.NODE_ENV === 'development' && (
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md p-4">
-                    <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-2">Debug Info</h3>
-                    <details className="text-xs text-yellow-700 dark:text-yellow-300">
-                        <summary className="cursor-pointer mb-2">Click to see raw data</summary>
-                        <pre className="bg-yellow-100 dark:bg-yellow-900/40 p-2 rounded overflow-auto max-h-40">
-                            {JSON.stringify({ stats, chartData, loading, error }, null, 2)}
-                        </pre>
-                    </details>
-                </div>
-            )}
-
             {/* Error Message */}
             {error && (
                 <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 flex items-center gap-2">

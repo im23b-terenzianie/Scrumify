@@ -19,10 +19,13 @@ export default function AddStoryForm({ onSubmit, onCancel }: AddStoryFormProps) 
         if (!title.trim()) {
             return;
         }
+        if (storyPoints === '' || storyPoints === 0) {
+            return; // Simply return without showing alert
+        }
         onSubmit({
             title: title.trim(),
             description: description.trim() || undefined,
-            story_points: storyPoints === '' ? undefined : Number(storyPoints),
+            story_points: Number(storyPoints),
             priority,
         });
     };
@@ -63,31 +66,38 @@ export default function AddStoryForm({ onSubmit, onCancel }: AddStoryFormProps) 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Story Points
+                                Story Points (Fibonacci) *
                             </label>
-                            <input
-                                type="number"
+                            <select
                                 value={storyPoints}
                                 onChange={(e) => setStoryPoints(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
-                                placeholder="Story Points"
                                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                                min="0"
-                            />
+                                required
+                            >
+                                <option value="">Select Points *</option>
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                                <option value={3}>3</option>
+                                <option value={5}>5</option>
+                                <option value={8}>8</option>
+                                <option value={13}>13</option>
+                                <option value={21}>21</option>
+                            </select>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Priority (Fibonacci)
+                                Priority
                             </label>
                             <select
                                 value={priority}
                                 onChange={(e) => setPriority(parseInt(e.target.value) as StoryPriority)}
                                 className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
                             >
-                                <option value={StoryPriority.LOW}>🟢 Low (1)</option>
-                                <option value={StoryPriority.MEDIUM}>🟡 Medium (2)</option>
-                                <option value={StoryPriority.HIGH}>🟠 High (3)</option>
-                                <option value={StoryPriority.URGENT}>🔴 Urgent (5)</option>
-                                <option value={StoryPriority.CRITICAL}>🚨 Critical (8)</option>
+                                <option value={StoryPriority.LOW}>🟢 Low</option>
+                                <option value={StoryPriority.MEDIUM}>🟡 Medium</option>
+                                <option value={StoryPriority.HIGH}>🟠 High</option>
+                                <option value={StoryPriority.URGENT}>🔴 Urgent</option>
+                                <option value={StoryPriority.CRITICAL}>🚨 Critical</option>
                             </select>
                         </div>
                     </div>
