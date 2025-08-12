@@ -4,11 +4,17 @@ import Header from './Header.tsx'
 
 export default function Layout() {
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <div className="h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col">
+            {/* Fixed Header */}
             <Header />
-            <div className="flex">
+
+            {/* Main Content Area with Sidebar and Scrollable Content */}
+            <div className="flex flex-1 overflow-hidden">
+                {/* Fixed Sidebar */}
                 <Sidebar />
-                <main className="flex-1 p-6">
+
+                {/* Scrollable Main Content */}
+                <main className="flex-1 overflow-y-auto overflow-x-hidden">
                     <Outlet />
                 </main>
             </div>

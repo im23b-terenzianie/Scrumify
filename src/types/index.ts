@@ -10,10 +10,9 @@ export interface User {
 }
 
 export interface Project {
-    id: string
-    name: string
+    id: number
+    title: string
     description?: string
-    key: string
     owner_id: string
     created_at: string
     updated_at: string
@@ -32,6 +31,36 @@ export interface Sprint {
     created_at: string
     updated_at: string
     project?: Project
+}
+
+export interface Story {
+    id: string
+    title: string
+    description?: string
+    story_points?: number
+    priority: 'low' | 'medium' | 'high' | 'critical'
+    status: 'backlog' | 'todo' | 'in_progress' | 'review' | 'done'
+    project_id: string
+    sprint_id?: string
+    assignee_id?: string
+    created_at: string
+    updated_at: string
+    project?: Project
+    sprint?: Sprint
+    assignee?: User
+}
+
+export interface Task {
+    id: string
+    title: string
+    description?: string
+    status: 'todo' | 'in_progress' | 'done'
+    story_id: string
+    assignee_id?: string
+    created_at: string
+    updated_at: string
+    story?: Story
+    assignee?: User
 }
 
 export interface Story {
@@ -99,9 +128,8 @@ export interface PaginatedResponse<T> {
 
 // Form Types
 export interface CreateProjectRequest {
-    name: string
+    title: string
     description?: string
-    key: string
 }
 
 export interface CreateSprintRequest {
@@ -110,6 +138,37 @@ export interface CreateSprintRequest {
     project_id: string
     start_date: string
     end_date: string
+}
+
+export interface CreateStoryRequest {
+    title: string
+    description?: string
+    story_points?: number
+    priority: Story['priority']
+    project_id: string
+    sprint_id?: string
+}
+
+export interface UpdateStoryRequest {
+    title?: string
+    description?: string
+    story_points?: number
+    priority?: Story['priority']
+    status?: Story['status']
+    sprint_id?: string
+    assignee_id?: string
+}
+
+// UI Types
+export interface BoardColumn {
+    id: string
+    title: string
+    status: Story['status']
+    stories: Story[]
+}
+
+export interface KanbanBoard {
+    columns: BoardColumn[]
 }
 
 export interface CreateStoryRequest {
