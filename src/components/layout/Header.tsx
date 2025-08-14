@@ -18,54 +18,87 @@ export default function Header() {
     }
 
     return (
-        <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 flex-shrink-0 z-10">
+        <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-gray-200/50 dark:border-gray-700/50 flex-shrink-0 z-10">
             <div className="px-6 py-4">
                 <div className="flex items-center justify-between">
-                    <Link to="/dashboard" className="text-2xl font-bold text-purple-600">
-                        Scrumify
+                    <Link to="/dashboard" className="flex items-center gap-3 group">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+                            <span className="text-white font-bold text-lg">S</span>
+                        </div>
+                        <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                            Scrumify
+                        </span>
                     </Link>
                     <div className="flex items-center space-x-4">
                         <button
                             onClick={toggleTheme}
-                            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                            className="p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 group"
                             title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                         >
-                            {isDark ? '🌞' : '🌙'}
+                            <span className="text-xl group-hover:scale-110 transition-transform duration-200 block">
+                                {isDark ? '🌞' : '🌙'}
+                            </span>
                         </button>
 
                         {user && (
                             <>
-                                <span className="text-sm text-gray-600 dark:text-gray-300">
-                                    Welcome back, {user.full_name || user.username}!
-                                </span>
+                                <div className="hidden md:block">
+                                    <div className="text-right">
+                                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                            Welcome back, {user.full_name || user.username}! 👋
+                                        </div>
+                                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                                            {user.email}
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="relative">
                                     <button
                                         onClick={() => setShowDropdown(!showDropdown)}
-                                        className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors"
+                                        className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center hover:from-blue-600 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
                                     >
-                                        <span className="text-white text-sm font-medium">
+                                        <span className="text-white text-lg font-bold">
                                             {(user.full_name || user.username).charAt(0).toUpperCase()}
                                         </span>
                                     </button>
 
                                     {showDropdown && (
-                                        <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 border border-gray-200 dark:border-gray-700">
-                                            <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700">
-                                                <div className="font-medium">{user.full_name || user.username}</div>
-                                                <div className="text-gray-500 dark:text-gray-400">{user.email}</div>
+                                        <div className="absolute right-0 mt-3 w-64 bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg rounded-2xl shadow-2xl py-2 z-50 border border-gray-200/50 dark:border-gray-700/50">
+                                            <div className="px-4 py-3 border-b border-gray-200/50 dark:border-gray-700/50">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                                                        <span className="text-white font-bold">
+                                                            {(user.full_name || user.username).charAt(0).toUpperCase()}
+                                                        </span>
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-medium text-gray-900 dark:text-white">
+                                                            {user.full_name || user.username}
+                                                        </div>
+                                                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                            {user.email}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <Link
                                                 to="/profile"
                                                 onClick={() => setShowDropdown(false)}
-                                                className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors rounded-xl mx-2"
                                             >
-                                                👤 Profile Settings
+                                                <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                                                    <span>👤</span>
+                                                </div>
+                                                Profile Settings
                                             </Link>
                                             <button
                                                 onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                                className="flex items-center gap-3 w-full text-left px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors rounded-xl mx-2"
                                             >
-                                                🚪 Sign out
+                                                <div className="w-8 h-8 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                                                    <span>🚪</span>
+                                                </div>
+                                                Sign out
                                             </button>
                                         </div>
                                     )}

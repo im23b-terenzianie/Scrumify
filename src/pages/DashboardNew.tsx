@@ -13,92 +13,106 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 p-6 space-y-6">
             <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">📊 Dashboard</h1>
-                    <p className="text-gray-600 dark:text-gray-300">Welcome to your SCRUM management dashboard</p>
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                        <BarChart3 className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Dashboard</h1>
+                        <p className="text-gray-600 dark:text-gray-300 mt-2">Welcome to your SCRUM management dashboard</p>
+                    </div>
                 </div>
                 <button
                     onClick={refreshDashboard}
-                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-md transition-colors"
+                    className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                     <TrendingUp className="w-4 h-4" />
-                    Refresh
+                    Refresh Data
                 </button>
             </div>
 
             {/* Error Message */}
             {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                    <p className="text-red-800 dark:text-red-200">{error}</p>
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl p-4 flex items-center gap-3 shadow-sm">
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                        <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                    </div>
+                    <p className="text-red-800 dark:text-red-200 font-medium">{error}</p>
                 </div>
             )}
 
             {/* Main Statistics Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Active Boards */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{/* Active Boards */}
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Active Boards</h3>
-                            <p className="text-3xl font-bold text-purple-600">
+                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Active Boards</h3>
+                            <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mt-2">
                                 {stats?.activeBoards || 0}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 Project boards
                             </p>
                         </div>
-                        <BarChart3 className="w-8 h-8 text-purple-600" />
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                            <BarChart3 className="w-6 h-6 text-white" />
+                        </div>
                     </div>
                 </div>
 
                 {/* Total Stories */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Total Stories</h3>
-                            <p className="text-3xl font-bold text-blue-600">
+                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Total Stories</h3>
+                            <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mt-2">
                                 {stats?.totalStories || 0}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 Across all boards
                             </p>
                         </div>
-                        <Clock className="w-8 h-8 text-blue-600" />
+                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                            <Clock className="w-6 h-6 text-white" />
+                        </div>
                     </div>
                 </div>
 
                 {/* Completed Stories */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Completed</h3>
-                            <p className="text-3xl font-bold text-green-600">
+                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Completed</h3>
+                            <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mt-2">
                                 {stats?.completedStories || 0}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 {stats?.completionRate || 0}% completion rate
                             </p>
                         </div>
-                        <CheckCircle className="w-8 h-8 text-green-600" />
+                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                            <CheckCircle className="w-6 h-6 text-white" />
+                        </div>
                     </div>
                 </div>
 
                 {/* Story Points */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Story Points</h3>
-                            <p className="text-3xl font-bold text-orange-600">
+                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Story Points</h3>
+                            <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mt-2">
                                 {stats?.totalStoryPoints || 0}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                                 Avg {stats?.averageStoryPoints || 0} per story
                             </p>
                         </div>
-                        <Target className="w-8 h-8 text-orange-600" />
+                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                            <Target className="w-6 h-6 text-white" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,11 +120,11 @@ export default function Dashboard() {
             {/* Secondary Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* My Assigned Stories */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">My Assigned Stories</h3>
-                            <p className="text-3xl font-bold text-indigo-600">
+                            <p className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                 {stats?.myAssignedStories || 0}
                             </p>
                         </div>
@@ -119,53 +133,60 @@ export default function Dashboard() {
                 </div>
 
                 {/* In Progress */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="flex items-center justify-between mb-4">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-200 hover:shadow-2xl group">
+                    <div className="flex items-center justify-between">
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">In Progress</h3>
-                            <p className="text-3xl font-bold text-yellow-600">
+                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">In Progress</h3>
+                            <p className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mt-2">
                                 {stats?.inProgressStories || 0}
                             </p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                Currently active
+                            </p>
                         </div>
-                        <Clock className="w-8 h-8 text-yellow-600" />
+                        <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                            <Clock className="w-6 h-6 text-white" />
+                        </div>
                     </div>
                 </div>
             </div>
 
             {/* Status Distribution */}
             {stats?.statusDistribution && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <PieChart className="w-5 h-5" />
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-200 hover:shadow-2xl">
+                    <div className="p-8 border-b border-gray-200/50 dark:border-gray-700/50">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                <PieChart className="w-5 h-5 text-white" />
+                            </div>
                             Status Distribution
                         </h2>
                     </div>
-                    <div className="p-6">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="text-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <p className="text-2xl font-bold text-gray-600">
+                    <div className="p-8">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div className="text-center p-6 bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-gray-700/50 dark:to-gray-700/30 rounded-xl backdrop-blur-sm">
+                                <p className="text-3xl font-bold bg-gradient-to-r from-gray-600 to-gray-700 bg-clip-text text-transparent">
                                     {stats.statusDistribution.TODO || 0}
                                 </p>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">📝 To Do</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">📝 To Do</p>
                             </div>
-                            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                <p className="text-2xl font-bold text-blue-600">
+                            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-900/10 rounded-xl backdrop-blur-sm">
+                                <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                                     {stats.statusDistribution.IN_PROGRESS || 0}
                                 </p>
-                                <p className="text-sm text-blue-500">⚡ In Progress</p>
+                                <p className="text-sm text-blue-500 mt-2">⚡ In Progress</p>
                             </div>
-                            <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                                <p className="text-2xl font-bold text-yellow-600">
+                            <div className="text-center p-6 bg-gradient-to-br from-yellow-50 to-yellow-100/50 dark:from-yellow-900/20 dark:to-yellow-900/10 rounded-xl backdrop-blur-sm">
+                                <p className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-yellow-700 bg-clip-text text-transparent">
                                     {stats.statusDistribution.IN_REVIEW || 0}
                                 </p>
-                                <p className="text-sm text-yellow-500">👀 In Review</p>
+                                <p className="text-sm text-yellow-500 mt-2">👀 In Review</p>
                             </div>
-                            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                                <p className="text-2xl font-bold text-green-600">
+                            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-900/20 dark:to-green-900/10 rounded-xl backdrop-blur-sm">
+                                <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-green-700 bg-clip-text text-transparent">
                                     {stats.statusDistribution.DONE || 0}
                                 </p>
-                                <p className="text-sm text-green-500">✅ Done</p>
+                                <p className="text-sm text-green-500 mt-2">✅ Done</p>
                             </div>
                         </div>
                     </div>
@@ -174,16 +195,18 @@ export default function Dashboard() {
 
             {/* Board Performance Chart */}
             {chartData?.boardPerformance && chartData.boardPerformance.length > 0 && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <BarChart3 className="w-5 h-5" />
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-200 hover:shadow-2xl">
+                    <div className="p-8 border-b border-gray-200/50 dark:border-gray-700/50">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
+                                <BarChart3 className="w-5 h-5 text-white" />
+                            </div>
                             Board Performance
                         </h2>
-                        <p className="text-gray-600 dark:text-gray-400">Story completion by board</p>
+                        <p className="text-gray-600 dark:text-gray-400 mt-2">Story completion by board</p>
                     </div>
-                    <div className="p-6">
-                        <div className="space-y-4">
+                    <div className="p-8">
+                        <div className="space-y-6">
                             {chartData.boardPerformance.map((board, index) => {
                                 // Safe number conversion
                                 const total = Number(board.total) || 0;
@@ -195,26 +218,26 @@ export default function Dashboard() {
                                 const progressWidth = total > 0 ? (completed / total) * 100 : 0;
 
                                 return (
-                                    <div key={index} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div key={index} className="flex items-center justify-between p-6 bg-gradient-to-r from-gray-50/50 to-blue-50/30 dark:from-gray-700/30 dark:to-blue-900/10 rounded-xl backdrop-blur-sm transition-all duration-200 hover:shadow-lg">
                                         <div className="flex-1">
-                                            <h3 className="font-medium text-gray-900 dark:text-white">{board.name}</h3>
-                                            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                                                <span>Total: {total}</span>
-                                                <span>Completed: {completed}</span>
-                                                <span>Points: {points}</span>
+                                            <h3 className="font-bold text-gray-900 dark:text-white text-lg">{board.name}</h3>
+                                            <div className="flex items-center gap-6 text-sm text-gray-600 dark:text-gray-400 mt-2">
+                                                <span className="bg-white/80 dark:bg-gray-800/80 px-3 py-1 rounded-lg">Total: {total}</span>
+                                                <span className="bg-white/80 dark:bg-gray-800/80 px-3 py-1 rounded-lg">Completed: {completed}</span>
+                                                <span className="bg-white/80 dark:bg-gray-800/80 px-3 py-1 rounded-lg">Points: {points}</span>
                                             </div>
                                             {/* Progress bar */}
-                                            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mt-2">
+                                            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 mt-4 overflow-hidden">
                                                 <div
-                                                    className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                                                    className="bg-gradient-to-r from-indigo-500 to-purple-600 h-3 rounded-full transition-all duration-500 shadow-sm"
                                                     style={{
                                                         width: `${Math.min(100, Math.max(0, progressWidth))}%`
                                                     }}
                                                 />
                                             </div>
                                         </div>
-                                        <div className="ml-4 text-right">
-                                            <p className="text-lg font-bold text-purple-600">
+                                        <div className="ml-6 text-right">
+                                            <p className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                                                 {isNaN(percentage) ? 0 : percentage}%
                                             </p>
                                         </div>
@@ -228,15 +251,17 @@ export default function Dashboard() {
 
             {/* Weekly Trend */}
             {chartData?.weeklyTrend && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                            <TrendingUp className="w-5 h-5" />
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 transition-all duration-200 hover:shadow-2xl">
+                    <div className="p-8 border-b border-gray-200/50 dark:border-gray-700/50">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center">
+                                <TrendingUp className="w-5 h-5 text-white" />
+                            </div>
                             Weekly Trend
                         </h2>
                     </div>
-                    <div className="p-6">
-                        <div className="grid grid-cols-7 gap-2">
+                    <div className="p-8">
+                        <div className="grid grid-cols-7 gap-4">
                             {chartData.weeklyTrend.map((day, index) => {
                                 // Safe calculation for trend heights
                                 const maxStories = Math.max(...chartData.weeklyTrend.map(d => Number(d.stories) || 0), 1);
@@ -247,29 +272,29 @@ export default function Dashboard() {
 
                                 return (
                                     <div key={index} className="text-center">
-                                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">{day.date}</p>
-                                        <div className="space-y-1">
-                                            <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded relative overflow-hidden">
+                                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">{day.date}</p>
+                                        <div className="space-y-2">
+                                            <div className="h-20 bg-gradient-to-t from-gray-200 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-xl relative overflow-hidden shadow-inner">
                                                 {/* Total Stories Bar (Background) */}
                                                 <div
-                                                    className="absolute bottom-0 w-full bg-blue-500/30 transition-all duration-300"
+                                                    className="absolute bottom-0 w-full bg-gradient-to-t from-blue-400 to-blue-300 transition-all duration-500 rounded-xl"
                                                     style={{
                                                         height: `${Math.min(100, Math.max(0, storiesHeight))}%`
                                                     }}
                                                 />
                                                 {/* Completed Stories Bar (Foreground) */}
                                                 <div
-                                                    className="absolute bottom-0 w-full bg-green-500 transition-all duration-300"
+                                                    className="absolute bottom-0 w-full bg-gradient-to-t from-emerald-500 to-emerald-400 transition-all duration-500 rounded-xl shadow-sm"
                                                     style={{
                                                         height: `${Math.min(100, Math.max(0, completedHeight))}%`
                                                     }}
                                                 />
                                             </div>
-                                            <div className="text-xs">
-                                                <p className="font-medium text-gray-900 dark:text-white">
+                                            <div className="text-xs space-y-1">
+                                                <p className="font-bold text-gray-900 dark:text-white">
                                                     {Number(day.stories) || 0} total
                                                 </p>
-                                                <p className="text-green-600 dark:text-green-400">
+                                                <p className="text-emerald-600 dark:text-emerald-400 font-medium">
                                                     {Number(day.completed) || 0} done
                                                 </p>
                                             </div>

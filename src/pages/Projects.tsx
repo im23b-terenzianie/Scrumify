@@ -60,22 +60,24 @@ export default function Projects() {
     }
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 p-6 space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Projects</h1>
-                    <p className="text-gray-600 dark:text-gray-300">Manage your SCRUM projects</p>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Projects</h1>
+                    <p className="text-gray-600 dark:text-gray-300 mt-2">Manage your SCRUM projects</p>
                 </div>
                 <button
                     onClick={() => setShowCreateForm(true)}
-                    className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition-colors"
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
                 >
+                    <span className="text-lg">+</span>
                     New Project
                 </button>
             </div>
 
             {error && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 text-red-800 dark:text-red-200 px-4 py-3 rounded-xl flex items-center gap-3">
+                    <div className="w-5 h-5 text-red-500">⚠️</div>
                     {error}
                 </div>
             )}
@@ -129,27 +131,33 @@ export default function Projects() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {projects.map((project) => (
-                    <div key={project.id} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-md transition-shadow border dark:border-gray-700">
+                    <div key={project.id} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group transform hover:scale-[1.02]">
                         <div className="flex justify-between items-start mb-4">
                             <div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{project.title}</h3>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{project.title}</h3>
                             </div>
-                            <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            <span className="px-3 py-1 text-xs font-medium rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-sm">
                                 Active
                             </span>
                         </div>
-                        <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+                        <p className="text-gray-600 dark:text-gray-300 mb-6 text-sm leading-relaxed">
                             {project.description || 'No description available'}
                         </p>
                         <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                                {project.members?.length || 0} members
-                            </span>
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
+                                    <span className="text-white text-xs font-bold">{project.members?.length || 0}</span>
+                                </div>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">
+                                    members
+                                </span>
+                            </div>
                             <Link
                                 to={`/projects/${project.id}/board`}
-                                className="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium"
+                                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 group"
                             >
-                                View Board →
+                                View Board
+                                <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
                             </Link>
                         </div>
                     </div>
@@ -158,7 +166,17 @@ export default function Projects() {
 
             {projects.length === 0 && !isLoading && (
                 <div className="text-center py-12">
-                    <p className="text-gray-500 dark:text-gray-400">No projects found. Create your first project!</p>
+                    <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                        <span className="text-3xl text-white">📋</span>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No projects yet</h3>
+                    <p className="text-gray-500 dark:text-gray-400 mb-6">Create your first project to get started with SCRUM management!</p>
+                    <button
+                        onClick={() => setShowCreateForm(true)}
+                        className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                        Create Project
+                    </button>
                 </div>
             )}
         </div>
