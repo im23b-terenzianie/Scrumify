@@ -5,6 +5,12 @@ class ApiClient {
     private baseURL = API_CONFIG.BASE_URL
 
     async request(endpoint: string, options: RequestInit = {}) {
+        // Check and refresh token if needed before making the request
+        const tokenValid = await authService.refreshTokenIfNeeded()
+        if (!tokenValid) {
+            throw new Error('Authentication required')
+        }
+
         const token = authService.getToken()
 
         const config: RequestInit = {
@@ -16,18 +22,27 @@ class ApiClient {
             },
         }
 
-        const response = await fetch(`${this.baseURL}${endpoint}`, config)
+        try {
+            const response = await fetch(`${this.baseURL}${endpoint}`, config)
 
-        if (!response.ok) {
-            if (response.status === 401) {
-                authService.logout()
-                window.location.href = '/login'
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    console.log('🚪 Received 401/403, logging out...')
+                    authService.logout()
+                    throw new Error('Authentication failed - please login again')
+                }
+                const error = await response.json().catch(() => ({ detail: `HTTP ${response.status}` }))
+                throw new Error(error.detail || `HTTP ${response.status}: ${response.statusText}`)
             }
-            const error = await response.json().catch(() => ({ detail: `HTTP ${response.status}` }))
-            throw new Error(error.detail || `HTTP ${response.status}: ${response.statusText}`)
-        }
 
-        return await response.json()
+            return await response.json()
+        } catch (error) {
+            // Handle network errors gracefully
+            if (error instanceof TypeError && error.message.includes('fetch')) {
+                throw new Error('Network error - please check your connection')
+            }
+            throw error
+        }
     }
 
     // Boards API

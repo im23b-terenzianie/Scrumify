@@ -22,6 +22,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
 
+    // Check if user is authenticated with valid token
     const isAuthenticated = authService.isAuthenticated()
 
     useEffect(() => {
@@ -29,17 +30,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
             if (isAuthenticated) {
                 try {
                     console.log('🔍 Attempting to load current user...')
+
+                    // Check if token needs refresh
+                    const tokenValid = await authService.refreshTokenIfNeeded()
+                    if (!tokenValid) {
+                        console.log('🚪 Token refresh failed, logging out')
+                        setIsLoading(false)
+                        return
+                    }
+
                     const currentUser = await authService.getCurrentUser()
                     console.log('✅ Current user loaded:', currentUser)
                     setUser(currentUser)
                 } catch (error) {
                     console.error('❌ Failed to get current user:', error)
-                    // NUR ausloggen wenn es ein echter Auth-Fehler ist (401/403), nicht bei Netzwerkfehlern
-                    if (error instanceof Error && error.message.includes('401')) {
-                        console.log('🚪 Logging out due to invalid token')
+
+                    // If it's an auth error, logout. Otherwise keep trying
+                    if (error instanceof Error &&
+                        (error.message.includes('401') ||
+                            error.message.includes('403') ||
+                            error.message.includes('Authentication'))) {
+                        console.log('🚪 Logging out due to authentication error')
                         authService.logout()
                     } else {
-                        console.log('🔧 Network error, keeping user logged in')
+                        console.log('🔧 Non-auth error, keeping user session')
                     }
                 }
             }
@@ -47,6 +61,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
 
         initAuth()
+
+        // Set up periodic token validation (every 5 minutes)
+        const tokenCheckInterval = setInterval(async () => {
+            if (authService.isAuthenticated()) {
+                const tokenValid = await authService.refreshTokenIfNeeded()
+                if (!tokenValid) {
+                    console.log('🚪 Periodic token check failed, logging out')
+                    setUser(null)
+                }
+            }
+        }, 5 * 60 * 1000) // Check every 5 minutes
+
+        return () => clearInterval(tokenCheckInterval)
     }, [isAuthenticated])
 
     const login = async (credentials: LoginRequest) => {
@@ -90,14 +117,32 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const refreshUser = async () => {
         try {
-            if (isAuthenticated) {
+            if (authService.isAuthenticated()) {
                 console.log('🔄 Refreshing user data...')
+
+                // Ensure token is still valid before refreshing
+                const tokenValid = await authService.refreshTokenIfNeeded()
+                if (!tokenValid) {
+                    console.log('🚪 Token invalid during refresh, logging out')
+                    setUser(null)
+                    return
+                }
+
                 const userData = await authService.getCurrentUser()
                 setUser(userData)
                 console.log('✅ User data refreshed:', userData)
             }
         } catch (error) {
             console.error('❌ Failed to refresh user data:', error)
+
+            // If refresh fails due to auth issues, logout
+            if (error instanceof Error &&
+                (error.message.includes('401') ||
+                    error.message.includes('403') ||
+                    error.message.includes('Authentication'))) {
+                console.log('🚪 Logging out due to refresh authentication error')
+                logout()
+            }
         }
     }
 

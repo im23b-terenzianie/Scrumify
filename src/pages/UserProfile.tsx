@@ -103,257 +103,287 @@ export default function UserProfile() {
 
     if (!user) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="text-lg text-gray-600">Loading profile...</div>
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20 flex items-center justify-center">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl p-8 border border-gray-200/50 dark:border-gray-700/50">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg animate-pulse"></div>
+                        <div className="text-xl text-gray-600 dark:text-gray-300 font-medium">Loading profile...</div>
+                    </div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 space-y-8">
-            {/* Header */}
-            <div className="text-center">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">User Profile</h1>
-                <p className="text-gray-600 dark:text-gray-400">Manage your account settings and preferences</p>
-            </div>
-
-            {/* Success/Error Messages */}
-            {success && (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md p-4">
-                    <p className="text-green-800 dark:text-green-200">{success}</p>
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-indigo-900/20">
+            <div className="max-w-6xl mx-auto p-6 space-y-8">
+                {/* Header */}
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl mb-4 shadow-xl">
+                        <User className="w-10 h-10 text-white" />
+                    </div>
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                        User Profile
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                        Manage your account settings and preferences
+                    </p>
                 </div>
-            )}
 
-            {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 flex items-center gap-2">
-                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                    <p className="text-red-800 dark:text-red-200">{error}</p>
-                </div>
-            )}
+                {/* Success/Error Messages */}
+                {success && (
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border border-green-200 dark:border-green-800 rounded-2xl p-4 shadow-lg">
+                        <p className="text-green-800 dark:text-green-200 flex items-center gap-2">
+                            <span className="text-xl">✅</span>
+                            {success}
+                        </p>
+                    </div>
+                )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Avatar Section */}
-                <div className="lg:col-span-1">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                            <Camera className="w-5 h-5" />
-                            Profile Picture
-                        </h2>
-                        <div className="text-center">
-                            <div className="mx-auto w-32 h-32 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-4">
-                                {user.avatar_url ? (
-                                    <img
-                                        src={user.avatar_url}
-                                        alt="Profile"
-                                        className="w-32 h-32 rounded-full object-cover"
+                {error && (
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border border-red-200 dark:border-red-800 rounded-2xl p-4 flex items-center gap-3 shadow-lg">
+                        <AlertCircle className="w-6 h-6 text-red-600 dark:text-red-400 flex-shrink-0" />
+                        <p className="text-red-800 dark:text-red-200">{error}</p>
+                    </div>
+                )}
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Avatar Section */}
+                    <div className="lg:col-span-1">
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-200 hover:shadow-2xl">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                    <Camera className="w-5 h-5 text-white" />
+                                </div>
+                                Profile Picture
+                            </h2>
+                            <div className="text-center">
+                                <div className="mx-auto w-40 h-40 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-200 hover:scale-105">
+                                    {user.avatar_url ? (
+                                        <img
+                                            src={user.avatar_url}
+                                            alt="Profile"
+                                            className="w-40 h-40 rounded-2xl object-cover"
+                                        />
+                                    ) : (
+                                        <User className="w-20 h-20 text-white" />
+                                    )}
+                                </div>
+                                <div className="space-y-3">
+                                    <input
+                                        type="url"
+                                        value={profileData.avatar_url}
+                                        onChange={(e) => setProfileData(prev => ({ ...prev, avatar_url: e.target.value }))}
+                                        placeholder="Avatar URL (optional)"
+                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                     />
-                                ) : (
-                                    <User className="w-16 h-16 text-purple-600 dark:text-purple-400" />
-                                )}
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        Enter a URL to your profile picture
+                                    </p>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <input
-                                    type="url"
-                                    value={profileData.avatar_url}
-                                    onChange={(e) => setProfileData(prev => ({ ...prev, avatar_url: e.target.value }))}
-                                    placeholder="Avatar URL (optional)"
-                                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-                                />
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    Enter a URL to your profile picture
-                                </p>
-                            </div>
+                        </div>
+                    </div>
+
+                    {/* Profile Form */}
+                    <div className="lg:col-span-2">
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-200 hover:shadow-2xl">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                                    <User className="w-5 h-5 text-white" />
+                                </div>
+                                Profile Information
+                            </h2>
+
+                            <form onSubmit={handleProfileUpdate} className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                            Username *
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={profileData.username}
+                                            onChange={(e) => setProfileData(prev => ({ ...prev, username: e.target.value }))}
+                                            className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                            Email *
+                                        </label>
+                                        <input
+                                            type="email"
+                                            value={profileData.email}
+                                            onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
+                                            className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                        Full Name
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={profileData.full_name}
+                                        onChange={(e) => setProfileData(prev => ({ ...prev, full_name: e.target.value }))}
+                                        className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                        placeholder="Your full name (optional)"
+                                    />
+                                </div>
+
+                                <div className="flex justify-end pt-4">
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                    >
+                                        <Save className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                        {loading ? 'Saving...' : 'Save Profile'}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
 
-                {/* Profile Form */}
-                <div className="lg:col-span-2">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                            <User className="w-5 h-5" />
-                            Profile Information
-                        </h2>
+                {/* Security Section */}
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-200 hover:shadow-2xl">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center">
+                            <Lock className="w-5 h-5 text-white" />
+                        </div>
+                        Security Settings
+                    </h2>
 
-                        <form onSubmit={handleProfileUpdate} className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-6">
+                        {!showPasswordForm ? (
+                            <button
+                                onClick={() => setShowPasswordForm(true)}
+                                className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                            >
+                                <Lock className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                Change Password
+                            </button>
+                        ) : (
+                            <form onSubmit={handlePasswordChange} className="space-y-6">
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Username *
+                                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                        Current Password
                                     </label>
                                     <input
-                                        type="text"
-                                        value={profileData.username}
-                                        onChange={(e) => setProfileData(prev => ({ ...prev, username: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                        type="password"
+                                        value={passwordData.currentPassword}
+                                        onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                                        className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
                                         required
                                     />
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Email *
-                                    </label>
-                                    <input
-                                        type="email"
-                                        value={profileData.email}
-                                        onChange={(e) => setProfileData(prev => ({ ...prev, email: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                        required
-                                    />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                            New Password
+                                        </label>
+                                        <input
+                                            type="password"
+                                            value={passwordData.newPassword}
+                                            onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                                            className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                                            Confirm New Password
+                                        </label>
+                                        <input
+                                            type="password"
+                                            value={passwordData.confirmPassword}
+                                            onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                                            className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl bg-white/70 dark:bg-gray-700/70 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                                            required
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Full Name
-                                </label>
-                                <input
-                                    type="text"
-                                    value={profileData.full_name}
-                                    onChange={(e) => setProfileData(prev => ({ ...prev, full_name: e.target.value }))}
-                                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                    placeholder="Your full name (optional)"
-                                />
-                            </div>
-
-                            <div className="flex justify-end">
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white rounded-md transition-colors"
-                                >
-                                    <Save className="w-4 h-4" />
-                                    {loading ? 'Saving...' : 'Save Profile'}
-                                </button>
-                            </div>
-                        </form>
+                                <div className="flex gap-3 pt-4">
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                    >
+                                        <Save className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                        {loading ? 'Changing...' : 'Change Password'}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowPasswordForm(false);
+                                            setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                                        }}
+                                        className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        )}
                     </div>
                 </div>
-            </div>
 
-            {/* Security Section */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                    <Lock className="w-5 h-5" />
-                    Security Settings
-                </h2>
+                {/* Danger Zone */}
+                <div className="bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-8 shadow-xl">
+                    <h2 className="text-2xl font-bold text-red-800 dark:text-red-200 mb-4 flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
+                            <Trash2 className="w-5 h-5 text-white" />
+                        </div>
+                        Danger Zone
+                    </h2>
+                    <p className="text-red-700 dark:text-red-300 mb-6 text-lg">
+                        Deleting your account is permanent and cannot be undone. All your data will be lost.
+                    </p>
 
-                <div className="space-y-4">
-                    {!showPasswordForm ? (
+                    {!showDeleteConfirm ? (
                         <button
-                            onClick={() => setShowPasswordForm(true)}
-                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                            onClick={() => setShowDeleteConfirm(true)}
+                            className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
                         >
-                            <Lock className="w-4 h-4" />
-                            Change Password
+                            <Trash2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                            Delete Account
                         </button>
                     ) : (
-                        <form onSubmit={handlePasswordChange} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Current Password
-                                </label>
-                                <input
-                                    type="password"
-                                    value={passwordData.currentPassword}
-                                    onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                                    className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                    required
-                                />
+                        <div className="space-y-6">
+                            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-xl p-6 border border-red-300 dark:border-red-700">
+                                <p className="text-red-800 dark:text-red-200 font-bold text-lg mb-2">
+                                    ⚠️ Are you absolutely sure?
+                                </p>
+                                <p className="text-red-700 dark:text-red-300">
+                                    This action cannot be undone. Your account and all associated data will be permanently deleted.
+                                </p>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        New Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        value={passwordData.newPassword}
-                                        onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Confirm New Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        value={passwordData.confirmPassword}
-                                        onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                        className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex gap-2">
+                            <div className="flex gap-3">
                                 <button
-                                    type="submit"
+                                    onClick={handleDeleteAccount}
                                     disabled={loading}
-                                    className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-md transition-colors"
+                                    className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
                                 >
-                                    <Save className="w-4 h-4" />
-                                    {loading ? 'Changing...' : 'Change Password'}
+                                    <Trash2 className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                                    {loading ? 'Deleting...' : 'Yes, Delete My Account'}
                                 </button>
                                 <button
-                                    type="button"
-                                    onClick={() => {
-                                        setShowPasswordForm(false);
-                                        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                                    }}
-                                    className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors"
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                    className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg"
                                 >
                                     Cancel
                                 </button>
                             </div>
-                        </form>
+                        </div>
                     )}
                 </div>
             </div>
-
-            {/* Danger Zone */}
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold text-red-800 dark:text-red-200 mb-4 flex items-center gap-2">
-                    <Trash2 className="w-5 h-5" />
-                    Danger Zone
-                </h2>
-                <p className="text-red-700 dark:text-red-300 mb-4">
-                    Deleting your account is permanent and cannot be undone. All your data will be lost.
-                </p>
-
-                {!showDeleteConfirm ? (
-                    <button
-                        onClick={() => setShowDeleteConfirm(true)}
-                        className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition-colors"
-                    >
-                        <Trash2 className="w-4 h-4" />
-                        Delete Account
-                    </button>
-                ) : (
-                    <div className="space-y-4">
-                        <p className="text-red-800 dark:text-red-200 font-medium">
-                            Are you absolutely sure? This action cannot be undone.
-                        </p>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={handleDeleteAccount}
-                                disabled={loading}
-                                className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-400 text-white rounded-md transition-colors"
-                            >
-                                <Trash2 className="w-4 h-4" />
-                                {loading ? 'Deleting...' : 'Yes, Delete My Account'}
-                            </button>
-                            <button
-                                onClick={() => setShowDeleteConfirm(false)}
-                                className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md transition-colors"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
         </div>
-    );
+    )
 }
