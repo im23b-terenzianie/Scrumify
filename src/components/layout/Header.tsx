@@ -21,7 +21,7 @@ export default function Header() {
         <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-sm border-b border-gray-200/50 dark:border-gray-700/50 flex-shrink-0 z-10">
             <div className="px-6 py-4">
                 <div className="flex items-center justify-between">
-                    <Link to="/dashboard" className="flex items-center gap-3 group">
+                    <Link to="/app/dashboard" className="flex items-center gap-3 group">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
                             <span className="text-white font-bold text-lg">S</span>
                         </div>
@@ -82,7 +82,7 @@ export default function Header() {
                                                 </div>
                                             </div>
                                             <Link
-                                                to="/profile"
+                                                to="/app/profile"
                                                 onClick={() => setShowDropdown(false)}
                                                 className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors rounded-xl mx-2"
                                             >

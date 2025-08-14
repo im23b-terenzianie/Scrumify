@@ -2,8 +2,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { BarChart3, FolderOpen } from 'lucide-react'
 
 const navigation = [
-    { name: 'Dashboard', href: '/', icon: BarChart3 },
-    { name: 'Projects', href: '/projects', icon: FolderOpen },
+    { name: 'Dashboard', href: '/app/dashboard', icon: BarChart3 },
+    { name: 'Projects', href: '/app/projects', icon: FolderOpen },
 ]
 
 export default function Sidebar() {
@@ -14,7 +14,7 @@ export default function Sidebar() {
             <div className="p-3">
                 <nav className="space-y-2">
                     {navigation.map((item) => {
-                        const isActive = location.pathname === item.href || (item.href === '/' && location.pathname === '/dashboard')
+                        const isActive = location.pathname === item.href
                         const IconComponent = item.icon
 
                         return (

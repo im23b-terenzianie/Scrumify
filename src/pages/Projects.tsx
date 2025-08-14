@@ -153,7 +153,7 @@ export default function Projects() {
                                 </span>
                             </div>
                             <Link
-                                to={`/projects/${project.id}/board`}
+                                to={`/app/projects/${project.id}/board`}
                                 className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-medium rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 group"
                             >
                                 View Board

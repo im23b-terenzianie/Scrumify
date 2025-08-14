@@ -86,7 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUser(response.user)
 
             // Redirect to dashboard
-            window.location.href = '/dashboard'
+            window.location.href = '/app/dashboard'
         } catch (error) {
             console.error('❌ Login failed:', error)
             throw error
@@ -103,7 +103,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             setUser(response.user)
 
             // Redirect to dashboard
-            window.location.href = '/dashboard'
+            window.location.href = '/app/dashboard'
         } catch (error) {
             console.error('❌ Registration failed:', error)
             throw error
