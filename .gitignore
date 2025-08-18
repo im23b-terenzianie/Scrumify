@@ -1,1 +1,9 @@
 node_modules
+
+# Build tools
+node_modules/@esbuild/win32-x64
+
+# Environment files
+.env
+.env.cproduction
+.env.production
