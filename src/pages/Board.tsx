@@ -216,10 +216,7 @@ export default function Board() {
             <div className="h-full flex flex-col p-6 min-h-0">
                 <div className="text-center py-6 flex-shrink-0">
                     <div className="inline-flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                            <span className="text-white font-bold text-xl">📋</span>
-                        </div>
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Project Board</h1>
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent leading-tight pt-1">Project Board</h1>
                     </div>
                     <p className="text-gray-600 dark:text-gray-400 text-lg">Project ID: {projectId}</p>
                     {columns.length > 3 && (
