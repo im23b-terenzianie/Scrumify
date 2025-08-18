@@ -1,4 +1,5 @@
 import { useDashboard } from '../hooks/useDashboardNew';
+import { StatsCard } from '../components/ui/StatsCard';
 import { BarChart3, TrendingUp, Clock, CheckCircle, AlertCircle, Users, Target, PieChart } from 'lucide-react';
 
 export default function Dashboard() {
@@ -44,111 +45,57 @@ export default function Dashboard() {
             )}
 
             {/* Main Statistics Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">{/* Active Boards */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Active Boards</h3>
-                            <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mt-2">
-                                {stats?.activeBoards || 0}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                Project boards
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                            <BarChart3 className="w-6 h-6 text-white" />
-                        </div>
-                    </div>
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatsCard
+                    title="Active Boards"
+                    value={stats?.activeBoards || 0}
+                    subtitle="Project boards"
+                    icon={<BarChart3 className="w-6 h-6" />}
+                    gradient="from-blue-500 to-indigo-500"
+                />
 
-                {/* Total Stories */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Total Stories</h3>
-                            <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mt-2">
-                                {stats?.totalStories || 0}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                Across all boards
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                            <Clock className="w-6 h-6 text-white" />
-                        </div>
-                    </div>
-                </div>
+                <StatsCard
+                    title="Total Stories"
+                    value={stats?.totalStories || 0}
+                    subtitle="Across all boards"
+                    icon={<Clock className="w-6 h-6" />}
+                    gradient="from-blue-500 to-cyan-500"
+                />
 
-                {/* Completed Stories */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Completed</h3>
-                            <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent mt-2">
-                                {stats?.completedStories || 0}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                {stats?.completionRate || 0}% completion rate
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                            <CheckCircle className="w-6 h-6 text-white" />
-                        </div>
-                    </div>
-                </div>
+                <StatsCard
+                    title="Completed"
+                    value={stats?.completedStories || 0}
+                    subtitle={`${stats?.completionRate || 0}% completion rate`}
+                    icon={<CheckCircle className="w-6 h-6" />}
+                    gradient="from-green-500 to-emerald-500"
+                />
 
-                {/* Story Points */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 group">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Story Points</h3>
-                            <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent mt-2">
-                                {stats?.totalStoryPoints || 0}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                Avg {stats?.averageStoryPoints || 0} per story
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                            <Target className="w-6 h-6 text-white" />
-                        </div>
-                    </div>
-                </div>
+                <StatsCard
+                    title="Story Points"
+                    value={stats?.totalStoryPoints || 0}
+                    subtitle={`Avg ${stats?.averageStoryPoints || 0} per story`}
+                    icon={<Target className="w-6 h-6" />}
+                    gradient="from-orange-500 to-red-500"
+                />
             </div>
 
             {/* Secondary Statistics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* My Assigned Stories */}
-                <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
-                    <div className="flex items-center justify-between mb-4">
-                        <div>
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">My Assigned Stories</h3>
-                            <p className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                                {stats?.myAssignedStories || 0}
-                            </p>
-                        </div>
-                        <Users className="w-8 h-8 text-indigo-600" />
-                    </div>
-                </div>
+                <StatsCard
+                    title="My Assigned Stories"
+                    value={stats?.myAssignedStories || 0}
+                    subtitle="Stories assigned to me"
+                    icon={<Users className="w-6 h-6" />}
+                    gradient="from-indigo-500 to-purple-500"
+                />
 
-                {/* In Progress */}
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-200 hover:shadow-2xl group">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">In Progress</h3>
-                            <p className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent mt-2">
-                                {stats?.inProgressStories || 0}
-                            </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                Currently active
-                            </p>
-                        </div>
-                        <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                            <Clock className="w-6 h-6 text-white" />
-                        </div>
-                    </div>
-                </div>
+                <StatsCard
+                    title="In Progress"
+                    value={stats?.inProgressStories || 0}
+                    subtitle="Currently active"
+                    icon={<Clock className="w-6 h-6" />}
+                    gradient="from-yellow-500 to-orange-500"
+                />
             </div>
 
             {/* Status Distribution */}
