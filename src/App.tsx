@@ -28,6 +28,7 @@ function App() {
                     <Route index element={<Navigate to="/app/dashboard" replace />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="projects" element={<Projects />} />
+                    <Route path="board/:boardId" element={<Board />} />
                     <Route path="projects/:projectId/board" element={<Board />} />
                     <Route path="profile" element={<UserProfile />} />
                 </Route>

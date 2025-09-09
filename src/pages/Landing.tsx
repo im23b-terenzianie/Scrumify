@@ -80,26 +80,8 @@ export default function Landing() {
                             Go to Dashboard
                         </Link>
                     </div>
-
-                    {/* Hero Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        <div className="text-center">
-                            <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">500+</div>
-                            <div className="text-gray-600 dark:text-gray-400">Active Teams</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">50k+</div>
-                            <div className="text-gray-600 dark:text-gray-400">User Stories</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">99.9%</div>
-                            <div className="text-gray-600 dark:text-gray-400">Uptime</div>
-                        </div>
-                    </div>
                 </div>
             </section>
-
-            {/* Features Section removed */}
 
             {/* CTA Section */}
             <section className="py-20 px-6">
@@ -114,9 +96,6 @@ export default function Landing() {
                                 Your Team's Productivity?
                             </span>
                         </h2>
-                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                            Join thousands of teams already using Scrumify to deliver better software faster.
-                        </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
                                 to="/register"

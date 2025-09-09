@@ -1,16 +1,12 @@
 import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
+import { useTheme } from '../../hooks/useTheme'
 
 export default function Header() {
-    const [isDark, setIsDark] = useState(false)
     const [showDropdown, setShowDropdown] = useState(false)
     const { user, logout } = useAuth()
-
-    const toggleTheme = () => {
-        setIsDark(!isDark)
-        document.documentElement.classList.toggle('dark')
-    }
+    const { isDark, toggleTheme } = useTheme()
 
     const handleLogout = () => {
         logout()
