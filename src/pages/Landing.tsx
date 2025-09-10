@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BarChart3, Users, Target, Zap, CheckCircle, ArrowRight, Star, TrendingUp } from 'lucide-react'
+import { ArrowRight, Star } from 'lucide-react'
 
 export default function Landing() {
     return (

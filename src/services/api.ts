@@ -27,7 +27,6 @@ class ApiClient {
 
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
-                    console.log('🚪 Received 401/403, logging out...')
                     authService.logout()
                     throw new Error('Authentication failed - please login again')
                 }
