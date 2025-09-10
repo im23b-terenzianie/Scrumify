@@ -18,10 +18,10 @@ export function useDashboard() {
     const loadDashboardStats = async () => {
         try {
             setState(prev => ({ ...prev, loading: true, error: null }));
-            console.log('📊 Loading dashboard statistics...');
+            
 
             const stats = await BoardService.getDashboardStats();
-            console.log('✅ Dashboard stats loaded:', stats);
+            
 
             setState({
                 stats,

@@ -17,20 +17,6 @@ export default function Landing() {
                                 Scrumify
                             </span>
                         </div>
-
-                        {/* Navigation Links */}
-                        <div className="hidden md:flex items-center gap-8">
-                            <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                                Features
-                            </a>
-                            <a href="#benefits" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                                Benefits
-                            </a>
-                            <a href="#pricing" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium">
-                                Pricing
-                            </a>
-                        </div>
-
                         {/* Auth Buttons */}
                         <div className="flex items-center gap-4">
                             <Link
@@ -94,118 +80,6 @@ export default function Landing() {
                             Go to Dashboard
                         </Link>
                     </div>
-
-                    {/* Hero Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                        <div className="text-center">
-                            <div className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">500+</div>
-                            <div className="text-gray-600 dark:text-gray-400">Active Teams</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">50k+</div>
-                            <div className="text-gray-600 dark:text-gray-400">User Stories</div>
-                        </div>
-                        <div className="text-center">
-                            <div className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">99.9%</div>
-                            <div className="text-gray-600 dark:text-gray-400">Uptime</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Features Section */}
-            <section id="features" className="py-20 px-6">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                                Powerful Features
-                            </span>
-                        </h2>
-                        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                            Everything you need to manage your agile projects efficiently and effectively.
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Feature 1 */}
-                        <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <BarChart3 className="w-8 h-8 text-white" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                Smart Analytics
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Get real-time insights into your team's performance with comprehensive dashboards and reports.
-                            </p>
-                        </div>
-
-                        {/* Feature 2 */}
-                        <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                            <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Users className="w-8 h-8 text-white" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                Team Collaboration
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Seamless collaboration tools that keep your entire team synchronized and productive.
-                            </p>
-                        </div>
-
-                        {/* Feature 3 */}
-                        <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Target className="w-8 h-8 text-white" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                Story Management
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Create, prioritize, and track user stories with our intuitive drag-and-drop interface.
-                            </p>
-                        </div>
-
-                        {/* Feature 4 */}
-                        <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                            <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <Zap className="w-8 h-8 text-white" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                Lightning Fast
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Built for speed with modern technology stack ensuring instant response times.
-                            </p>
-                        </div>
-
-                        {/* Feature 5 */}
-                        <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                            <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <TrendingUp className="w-8 h-8 text-white" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                Progress Tracking
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Monitor sprint progress and team velocity with beautiful, actionable charts.
-                            </p>
-                        </div>
-
-                        {/* Feature 6 */}
-                        <div className="group bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200/50 dark:border-gray-700/50 p-8 transition-all duration-300 hover:shadow-2xl hover:scale-105">
-                            <div className="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <CheckCircle className="w-8 h-8 text-white" />
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                                Quality Assurance
-                            </h3>
-                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                                Built-in QA workflows and testing management to ensure delivery excellence.
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -222,9 +96,6 @@ export default function Landing() {
                                 Your Team's Productivity?
                             </span>
                         </h2>
-                        <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
-                            Join thousands of teams already using Scrumify to deliver better software faster.
-                        </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
                                 to="/register"

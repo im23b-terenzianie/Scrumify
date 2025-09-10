@@ -9,7 +9,7 @@ interface KanbanState {
     error: string | null;
 }
 
-export const useKanban = (boardId: number) => {
+export const useKanban = (boardId: number | string) => {
     const [state, setState] = useState<KanbanState>({
         stories: [],
         loading: true,

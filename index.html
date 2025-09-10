@@ -6,6 +6,29 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scrumify - Modern SCRUM Management</title>
+    <script>
+        // Prevent theme flash by setting theme before React loads
+        (function () {
+            try {
+                const saved = localStorage.getItem('theme');
+
+                // If user has made an explicit choice, use it
+                if (saved === 'dark' || saved === 'light') {
+                    if (saved === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    }
+                } else {
+                    // Only fall back to system preference if no explicit choice was made
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (prefersDark) {
+                        document.documentElement.classList.add('dark');
+                    }
+                }
+            } catch (e) {
+                // Ignore localStorage errors
+            }
+        })();
+    </script>
 </head>
 
 <body>

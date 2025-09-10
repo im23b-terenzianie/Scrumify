@@ -21,11 +21,9 @@ export class DashboardService {
 
         if (!response.ok) {
             const errorText = await response.text();
-            console.error('🚨 Dashboard API Error Response:', errorText);
 
             try {
                 const errorData = JSON.parse(errorText);
-                console.error('🚨 Parsed Error Data:', errorData);
                 throw new Error(errorData.detail || `HTTP ${response.status}`);
             } catch {
                 throw new Error(`HTTP ${response.status}: ${errorText}`);
@@ -39,19 +37,11 @@ export class DashboardService {
     // ✅ HAUPT-DASHBOARD-DATEN LADEN
     static async getDashboardStats(): Promise<DashboardStats> {
         try {
-            console.log('📊 Loading comprehensive dashboard statistics...');
-
-            // Backend integration
-            const [boards, assignedStories] = await Promise.all([
-                this.apiCall('/boards/'),
-                this.apiCall('/user-stories/assigned').catch(() => [])
-            ]);
-
-            console.log('📋 Loaded data:', { boards: boards?.length, assignedStories: assignedStories?.length });
+            // Backend integration - nur verfügbare Endpoints verwenden
+            const boards = await this.apiCall('/boards/').catch(() => []);
 
             const boardsWithStats = await this.getBoardStatistics(boards || []);
             const storyStats = this.calculateStoryStatistics(boardsWithStats);
-            const userWorkload = this.calculateUserWorkload(assignedStories || []);
             const statusDistribution = this.calculateStatusDistribution(boardsWithStats);
 
             const stats = {
@@ -62,16 +52,13 @@ export class DashboardService {
                 totalStoryPoints: storyStats.totalStoryPoints,
                 averageStoryPoints: storyStats.averageStoryPoints,
                 inProgressStories: storyStats.inProgressStories,
-                myAssignedStories: userWorkload.assignedStories,
+                myAssignedStories: 0, // Da assigned stories endpoint nicht verfügbar ist
                 statusDistribution
             };
 
-            console.log('✅ Comprehensive dashboard stats calculated:', stats);
             return stats;
 
         } catch (error) {
-            console.error('❌ Dashboard stats error:', error);
-            console.log('🔄 Falling back to mock data...');
             return this.getMockDashboardStats();
         }
     }    // 📊 BOARD STATISTIKEN MIT BACKEND INTEGRATION
@@ -83,12 +70,10 @@ export class DashboardService {
         const boardsWithStats = await Promise.all(
             boards.map(async (board) => {
                 try {
-                    console.log(`📊 Loading stats for board ${board.id}...`);
+
                     const statsResponse = await this.apiCall(`/boards/${board.id}/stats`);
                     return statsResponse;
                 } catch (error) {
-                    console.warn(`Failed to get stats for board ${board.id}:`, error);
-
                     // Fallback mit leeren Stats
                     return {
                         ...board,
@@ -100,7 +85,7 @@ export class DashboardService {
             })
         );
 
-        console.log('✅ Boards with stats loaded:', boardsWithStats.length);
+
         return boardsWithStats;
     }
 
@@ -136,18 +121,7 @@ export class DashboardService {
         };
     }
 
-    // 👤 USER WORKLOAD BERECHNEN
-    static calculateUserWorkload(assignedStories: any[]) {
-        if (!Array.isArray(assignedStories)) {
-            return { assignedStories: 0 };
-        }
-
-        return {
-            assignedStories: assignedStories.length
-        };
-    }
-
-    // 📊 STATUS DISTRIBUTION BERECHNEN
+    //  STATUS DISTRIBUTION BERECHNEN
     static calculateStatusDistribution(boardsWithStats: any[]) {
         return {
             TODO: boardsWithStats.reduce((sum: number, board: any) => sum + (Number(board?.story_counts?.TODO) || 0), 0),
@@ -160,7 +134,7 @@ export class DashboardService {
     // 📊 CHART DATA MIT BACKEND INTEGRATION
     static async getChartData(): Promise<ChartData> {
         try {
-            console.log('📊 Loading chart data with backend integration...');
+
 
             const boards = await this.apiCall('/boards/');
             const boardsWithStats = await this.getBoardStatistics(boards || []);
@@ -176,7 +150,7 @@ export class DashboardService {
             // Weekly Trend basierend auf realen Daten
             const weeklyTrend = this.generateRealisticWeeklyTrend(boardsWithStats);
 
-            console.log('✅ Chart data generated:', { boardPerformance, weeklyTrend });
+
 
             return {
                 statusDistribution: [],
@@ -185,8 +159,6 @@ export class DashboardService {
             };
 
         } catch (error) {
-            console.error('❌ Chart data error:', error);
-            console.log('🔄 Falling back to mock chart data...');
             return this.getMockChartData();
         }
     }
@@ -261,7 +233,7 @@ export class DashboardService {
 
     // 🔄 DASHBOARD REFRESH
     static async refreshDashboard(): Promise<DashboardStats> {
-        console.log('🔄 Refreshing complete dashboard data...');
+
         return await this.getDashboardStats();
     }
 }
