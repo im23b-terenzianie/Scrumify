@@ -70,7 +70,7 @@ export class DashboardService {
         const boardsWithStats = await Promise.all(
             boards.map(async (board) => {
                 try {
-                    
+
                     const statsResponse = await this.apiCall(`/boards/${board.id}/stats`);
                     return statsResponse;
                 } catch (error) {
@@ -85,7 +85,7 @@ export class DashboardService {
             })
         );
 
-        
+
         return boardsWithStats;
     }
 
@@ -134,7 +134,7 @@ export class DashboardService {
     // 📊 CHART DATA MIT BACKEND INTEGRATION
     static async getChartData(): Promise<ChartData> {
         try {
-            
+
 
             const boards = await this.apiCall('/boards/');
             const boardsWithStats = await this.getBoardStatistics(boards || []);
@@ -150,7 +150,7 @@ export class DashboardService {
             // Weekly Trend basierend auf realen Daten
             const weeklyTrend = this.generateRealisticWeeklyTrend(boardsWithStats);
 
-            
+
 
             return {
                 statusDistribution: [],
@@ -233,7 +233,7 @@ export class DashboardService {
 
     // 🔄 DASHBOARD REFRESH
     static async refreshDashboard(): Promise<DashboardStats> {
-        
+
         return await this.getDashboardStats();
     }
 }
