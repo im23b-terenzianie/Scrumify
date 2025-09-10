@@ -80,8 +80,7 @@ export default function StoryDetailModal({ story, onClose, onEdit, onDelete }: S
             setIsEditing(false);
             // ✅ Modal bleibt offen, damit user das Ergebnis sieht
         } catch (error) {
-            console.error('Failed to update story:', error);
-            // Stiller Fehler ohne Alert - nur Console Log
+            // Silent error handling
         }
     };
 
@@ -96,8 +95,7 @@ export default function StoryDetailModal({ story, onClose, onEdit, onDelete }: S
             await onDelete(story.id);
             onClose();
         } catch (error) {
-            console.error('Failed to delete story:', error);
-            // Stiller Fehler ohne Alert - nur Console Log
+            // Silent error handling
         }
         setShowDeleteConfirm(false);
     };
