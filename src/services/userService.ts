@@ -50,8 +50,6 @@ export class UserService {
 
     // ✅ USER PROFILE AKTUALISIEREN
     static async updateProfile(profileData: UpdateUserProfile): Promise<User> {
-        console.log('📤 Updating user profile:', profileData);
-
         return await this.apiCall('/me', {
             method: 'PUT',
             body: JSON.stringify(profileData),
@@ -60,8 +58,6 @@ export class UserService {
 
     // ✅ PASSWORT ÄNDERN
     static async changePassword(currentPassword: string, newPassword: string): Promise<void> {
-        console.log('🔒 Changing user password');
-
         await this.apiCall('/me/password', {
             method: 'PUT',
             body: JSON.stringify({
@@ -73,8 +69,6 @@ export class UserService {
 
     // ✅ USER PROFILE LÖSCHEN (ACCOUNT DELETION)
     static async deleteAccount(): Promise<void> {
-        console.log('🗑️ Deleting user account');
-
         await this.apiCall('/me', {
             method: 'DELETE',
         });

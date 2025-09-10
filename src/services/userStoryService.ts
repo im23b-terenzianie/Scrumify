@@ -61,10 +61,6 @@ export class UserStoryService {
             assignee_id: storyData.assignee_id || null
         };
 
-        console.log('📤 Sending story creation request:', requestBody);
-        console.log('📤 Request Body JSON:', JSON.stringify(requestBody, null, 2));
-        console.log('🎯 API Endpoint:', `${this.API_BASE}/?board_id=${boardId}`);
-
         return await this.apiCall(`/?board_id=${boardId}`, {
             method: 'POST',
             body: JSON.stringify(requestBody),

@@ -726,19 +726,16 @@ export default function Board() {
                         story={selectedStory}
                         onClose={() => setSelectedStory(null)}
                         onEdit={async (storyId, updates) => {
-                            console.log('🔄 Updating story:', storyId, updates);
                             const success = await updateStory(storyId, updates);
                             if (success) {
                                 // Find the updated story and update selectedStory
                                 const updatedStory = stories.find(s => s.id === storyId);
                                 if (updatedStory) {
-                                    console.log('✅ Story updated, refreshing modal:', updatedStory);
                                     setSelectedStory(updatedStory);
                                 }
                             }
                         }}
                         onDelete={async (storyId) => {
-                            console.log('🗑️ Deleting story:', storyId);
                             const success = await deleteStory(storyId);
                             if (success) {
                                 setSelectedStory(null);

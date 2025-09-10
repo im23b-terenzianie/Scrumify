@@ -71,19 +71,19 @@ export class BoardService {
 
     // ✅ ALLE BOARDS LADEN
     static async getAllBoards(): Promise<Board[]> {
-        console.log('📋 Loading all boards...');
+        
         return await this.apiCall('');
     }
 
     // ✅ EINZELNES BOARD LADEN
     static async getBoard(boardId: number): Promise<Board> {
-        console.log(`📋 Loading board ${boardId}...`);
+        
         return await this.apiCall(`/${boardId}`);
     }
 
     // ✅ BOARD ERSTELLEN
     static async createBoard(boardData: Omit<Board, 'id' | 'created_at' | 'updated_at' | 'owner_id'>): Promise<Board> {
-        console.log('📋 Creating new board:', boardData);
+        
 
         return await this.apiCall('', {
             method: 'POST',
@@ -93,7 +93,7 @@ export class BoardService {
 
     // ✅ BOARD AKTUALISIEREN
     static async updateBoard(boardId: number, boardData: Partial<Omit<Board, 'id' | 'created_at' | 'updated_at' | 'owner_id'>>): Promise<Board> {
-        console.log(`📋 Updating board ${boardId}:`, boardData);
+        
 
         return await this.apiCall(`/${boardId}`, {
             method: 'PUT',
@@ -103,7 +103,7 @@ export class BoardService {
 
     // ✅ BOARD LÖSCHEN
     static async deleteBoard(boardId: number): Promise<void> {
-        console.log(`📋 Deleting board ${boardId}`);
+        
 
         await this.apiCall(`/${boardId}`, {
             method: 'DELETE',
@@ -112,19 +112,19 @@ export class BoardService {
 
     // ✅ BOARD STATISTIKEN LADEN
     static async getBoardStats(boardId: number): Promise<BoardStats> {
-        console.log(`📊 Loading stats for board ${boardId}...`);
+        
         return await this.apiCall(`/${boardId}/stats`);
     }
 
     // ✅ DASHBOARD STATISTIKEN LADEN (alle Boards des Users)
     static async getDashboardStats(): Promise<DashboardStats> {
-        console.log('📊 Loading dashboard statistics...');
+        
         return await this.apiCall('/stats');
     }
 
     // ✅ USER'S BOARDS LADEN
     static async getUserBoards(): Promise<Board[]> {
-        console.log('📋 Loading user boards...');
+        
         return await this.apiCall('/my-boards');
     }
 }

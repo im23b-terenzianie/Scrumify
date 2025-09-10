@@ -14,7 +14,7 @@ export const useDashboard = () => {
             setLoading(true);
             setError(null);
 
-            console.log('📊 Loading real dashboard data...');
+            
             const [dashboardStats, charts] = await Promise.all([
                 DashboardService.getDashboardStats(),
                 DashboardService.getChartData()
@@ -22,7 +22,7 @@ export const useDashboard = () => {
 
             setStats(dashboardStats);
             setChartData(charts);
-            console.log('✅ Dashboard data loaded successfully:', { stats: dashboardStats, charts });
+            
         } catch (err) {
             console.error('❌ Dashboard loading error:', err);
             setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
@@ -32,7 +32,7 @@ export const useDashboard = () => {
     };
 
     const refreshDashboard = async () => {
-        console.log('🔄 Refreshing dashboard...');
+        
         await loadDashboardData();
     };
 
@@ -41,7 +41,7 @@ export const useDashboard = () => {
 
         // Refresh dashboard when window regains focus (user returns to tab)
         const handleFocus = () => {
-            console.log('🎯 Window focused, refreshing dashboard...');
+            
             loadDashboardData();
         };
 
@@ -49,7 +49,7 @@ export const useDashboard = () => {
 
         // Auto-refresh every 60 seconds (less aggressive)
         const interval = setInterval(() => {
-            console.log('⏰ Auto-refreshing dashboard...');
+            
             loadDashboardData();
         }, 60000);
 

@@ -22,9 +22,7 @@ export default function Projects() {
         try {
             setIsLoading(true)
             setError('')
-            console.log('🔍 Loading projects...')
             const data = await apiClient.getBoards()
-            console.log('✅ Projects loaded:', data)
             setProjects(data)
         } catch (err: any) {
             console.error('❌ Failed to load projects:', err)

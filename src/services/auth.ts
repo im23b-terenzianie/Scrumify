@@ -85,8 +85,6 @@ export const authService = {
             throw new Error(error.detail || 'Registration failed')
         }
 
-        const registeredUser = await registerResponse.json()
-        console.log('✅ User registered:', registeredUser)
 
         // Schritt 2: Automatisch einloggen nach erfolgreicher Registrierung
         const loginData = await this.login({
@@ -103,7 +101,6 @@ export const authService = {
         if (!token) return false
 
         if (this.isTokenExpired(token)) {
-            console.log('🔄 Token expired, attempting refresh...')
 
             try {
                 // Try to get a new token by calling /me endpoint
@@ -111,7 +108,7 @@ export const authService = {
                 await this.getCurrentUser()
                 return true
             } catch (error) {
-                console.error('❌ Token refresh failed:', error)
+                console.error('Token refresh failed:', error)
                 this.logout()
                 return false
             }
@@ -133,7 +130,6 @@ export const authService = {
             throw new Error('401 - Token expired')
         }
 
-        console.log('🔍 Fetching current user with token:', token.substring(0, 20) + '...')
 
         try {
             const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.AUTH}/me`, {
@@ -142,11 +138,8 @@ export const authService = {
                 },
             })
 
-            console.log('📡 /me response status:', response.status)
-
             if (!response.ok) {
                 if (response.status === 401 || response.status === 403) {
-                    console.log('🚪 Received 401/403 from /me endpoint')
                     this.logout()
                     throw new Error('401 - Invalid or expired token')
                 }
@@ -156,7 +149,6 @@ export const authService = {
             }
 
             const userData = await response.json()
-            console.log('✅ Current user data:', userData)
 
             // Update stored user data
             localStorage.setItem('user', JSON.stringify(userData))
@@ -172,7 +164,6 @@ export const authService = {
 
     // Logout (client-side)
     logout() {
-        console.log('🚪 Logging out user...')
         localStorage.removeItem('access_token')
         localStorage.removeItem('user')
         localStorage.removeItem('token_received_at')
